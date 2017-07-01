@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-xs-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h1>Signup</h1>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-12">
+               <form class="form-horizontal">
+                    <div class="form-group">
+
+                        <h1>Blogs!</h1>
+                        <form method='post'>
+                            <label class="col-form-label">
+                                New Blog:
+                                <input class='form-control' type="text" name='blog' />
+                            </label>
+                            <input class='btn' type="submit" value='Add blog' />
+                        </form>
+                        <hr />
+
+                        {% if blogs %}
+                            <ul>
+                                {% for blog in blogs %}
+                                <li>{{blog}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="form-control">
+                                <p>No blogs yet</p>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
