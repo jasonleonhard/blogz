@@ -1,1 +1,25 @@
-<a href="/example">example</a>
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-sm-4"></div>
+<div class="col-sm-4">
+    <div class="panel panel-primary">
+        <div class="panel-heading pad_left">
+            <h1>Links</h1>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-4">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <ul>
+                            <li><a href="/"> <span class="label label-default">home</span></a></li>
+                            <li><a href="/example"> <span class="label label-default">example</span></a></li>
+                            <li><a href="/blogs"> <span class="label label-default">blogs</span></a></li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-4"></div>
+{% endblock  %}
