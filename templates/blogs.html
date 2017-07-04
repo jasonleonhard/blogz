@@ -8,7 +8,6 @@
         <div class="panel-body">
             <div class="col-xs-12">
                <form class="form-horizontal">
-                    <div class="form-group">
                         <form>
                             <label class="col-form-label">
                                 New Blog:
@@ -24,25 +23,26 @@
                         <hr />
                         <strong class='error' value="{{blog_body_error}}">{{blog_body_error}}</strong>
                         <strong class='error' value="{{blog_title_error}}">{{blog_title_error}}</strong>
-                        <!--blog entries in db-->
                         {% if blogs %}
-                            <ul>
-                                {% for blog in blogs %}
-                                    <li>
-                                        <h3>{{blog.title}}</h3>
-                                        <p>{{blog.body}}</p>
-                                        <!--delete blog-->
-                                        <form method="POST" action="/delete_blog" style="display:inline-block;">
-                                            <input type="hidden" name="blog-id" value="{{blog.id}}"  /><!--type="button" -->
+                            {% for blog in blogs %}
+                                <div class='panel panel-default'>
+                                    <div class='panel-body'>
+                                        <form method="POST" action="/delete_blog2" class='left'>
+                                            <input type="hidden" name="blog-id" value="{{blog.id}}"/>
                                             <input type="submit" value="Done" class="btn btn-primary"/>
                                         </form>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                                        <div class="left pad_left">
+                                            <a href="{{ url_for('blog', id=blog.id, blog_title=blog.title, blog_body=blog.body) }}">
+                                                <h3 class='no_top_margin'>{{blog.title}}</h3>
+                                            </a>
+                                            <p>{{blog.body}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         {% else %}
                             <p class="error">No blogs yet</p>
                         {% endif %}
-                    </div>
                 </form>
             </div>
         </div>
