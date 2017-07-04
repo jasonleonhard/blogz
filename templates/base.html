@@ -3,7 +3,6 @@
     <title>{{title}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!--favicon definition-->
     {% block head %}
     <link rel="shortcut icon" href="{{ url_for('static', filename = 'favicon.ico') }}"
@@ -11,7 +10,6 @@
     <link rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}"
     type="image/x-icon">
     {% endblock %}
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
@@ -23,21 +21,20 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='scripts/scripts.js') }}" ></script>
 </head>
-
 <body class="container">
     <div class="pad"></div>
     <div class='container'>
         {% block content %}
         {% endblock  %}
-
         <footer class='footer navbar-fixed-bottom pad-bottom text-center'>
             <div class="col-md-12">
                 <a href="/"> <span class="label label-default">home</span></a>
                 <a href="/example"> <span class="label label-default">example</span></a>
                 <a href="/blog"> <span class="label label-default">blog</span></a>
+                <a href="/newpost"> <span class="label label-default">newpost</span></a>
+                <a href="/blogs"> <span class="label label-default">blogs</span></a>
             </div>
         </footer>
     </div>
 </body>
-
 </html>
