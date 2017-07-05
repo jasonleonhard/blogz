@@ -1,3 +1,4 @@
+"""CRUD functionality for blogging."""
 from flask import Flask, request, url_for, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 from lib import *
@@ -5,6 +6,7 @@ from lib import *
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:ornottodo@localhost:8889/build-a-blog'
+
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
@@ -23,109 +25,13 @@ def index():
     """Renders links. Could also become a splash screen or signin."""
     return render_template('index.html', title='Greetings', directions='Links provided below.')
 
-@app.route("/example", methods=['POST', 'GET'])
-def example():
-    """Very simple example of routing and template rendering."""
-    return render_template('example.html')
-
 @app.route("/newpost")
 def newpost(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
             prev_blog_title='', prev_blog_body=''):
     """Create new blog and validate. Does not list blogs."""
     if request.args: # if request.method == 'GET':
-        blog_title = request.args.get('blog_title')
-        blog_body = request.args.get('blog_body')
-    # Validation Section # make sure that
-    # last blog is not the same as next blog
-    blog_count = Blog.query.count()
-    if blog_count != 0:
-        prev_blog_title = Blog.query.order_by('-id').first().title
-        prev_blog_body = Blog.query.order_by('-id').first().body
-    if blogs_have_same_content(prev_blog_title, blog_title, prev_blog_body, blog_body):
-        blog_title_error = 'Blogs must be different'
-    # not blank
-    if no_field_blank(blog_title, blog_body):
-        blog_title_error = 'Must not leave any field blank'
-    # no errors on page before or rerender page with errors
-    if blog_title_error or blog_body_error:
-        return render_template('newpost.html', title="Blogs",
-                            blog_title=blog_title, blog_body=blog_body,
-                            blog_title_error=blog_title_error, blog_body_error=blog_body_error)
-    # add new blog to db
-    else:
-        blog = Blog(blog_title, blog_body)
-        db.session.add(blog)
-        db.session.commit()
-        # on successful creation, show that new blog entry
-        return render_template('id.html', title="Blogs", blog=blog, blogs=blogs,
-                                blog_title=blog_title, blog_body=blog_body, id=id)
-
-@app.route("/delete_blog", methods=['GET', 'POST'])
-def delete_blog():
-    """Remove a blog from /blog."""
-    blog_id = int(request.form['blog-id'])
-    blog_target = Blog.query.get(blog_id)
-    db.session.delete(blog_target)
-    db.session.commit()
-    return redirect('/blog')
-
-@app.route("/delete_blog2", methods=['GET', 'POST'])
-def delete_blog2():
-    """Remove a blog from /blogs. Added for different redirect for /blogs"""
-    blog_id = int(request.form['blog-id'])
-    blog_target = Blog.query.get(blog_id)
-    db.session.delete(blog_target)
-    db.session.commit()
-    # blogs = Blog.query.all()
-    # return render_template('blogs.html', title="Blogs", blogs=blogs) # works
-    return redirect('/blogs') # better bc returns to page without /delete_blog in url
-
-@app.route("/delete_blog3", methods=['GET', 'POST'])
-def delete_blog3():
-    """Remove a blog from /id. Just redirects to blog where the same button actually can delete."""
-    return redirect('/blog')
-
-@app.route("/blog")
-def blog(blog_title='', blog_body='', blogs='', prev_blog_title='',prev_blog_body=''):
-    """ If params are captured into the url:
-    aka if given the correct url the id template will render all 3 requested
-    http://localhost:5000/blog?id=366&blog_title=title&blog_body=body
-    otherwise:
-    http://localhost:5000/blog
-    Lists all blogs. Does not allow new blog creation nor validation.
-    WIP part is when title is clicked that the id title and body are added to url and then a rerender
-    """
-    if request.args:
-        id = request.args.get('id')
-        blog_title = request.args.get('blog_title')
-        blog_body = request.args.get('blog_body')
-        # return "blog-id: %s <br> blog_title: %s <br> blog_body: %s" % (id, blog_title, blog_body)
-        return render_template('id.html', title="Blogs", blogs=blogs,
-                                blog_title=blog_title, blog_body=blog_body, id=id)
-    else:
-        blogs = Blog.query.all() # show current blogs in db
-        # if blogs:
-        # this version works great if you don't delete the first item
-        return render_template('blog.html', title="Blogs", blogs=blogs,
-                                    blog_title=blog_title, blog_body=blog_body)
-        # else:
-            # this version works great for deleting first item but doesn't render all blogs at all...
-            # return render_template('blog.html', title="Blogs",
-                                    # blog_title='', blog_body='')
-
-@app.route("/blogs")
-def blogs(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
-             blogs='', prev_blog_title='',prev_blog_body=''):
-    """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
-    blogs = Blog.query.all() # show current blogs in db
-    # add to database
-    if request.args: # if request.method == 'GET':
-        blog_title = request.args.get('blog_title')
-        blog_body = request.args.get('blog_body')
-    else:
-        return render_template('blogs.html', title="Blogs", blogs=blogs,
-                               blog_title=blog_title, blog_body=blog_body,
-                               blog_title_error=blog_title_error, blog_body_error=blog_body_error)
+        blog_title = get_title()
+        blog_body = get_body()
     # Validation Section # make sure that
     # last blog is not the same as next blog
     blog_count = Blog.query.count()
@@ -139,19 +45,126 @@ def blogs(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
         blog_title_error = 'Must not leave any field blank'
     # no errors on page before or rerender page with errors
     if blog_title_error or blog_body_error:
-        return render_template('blogs.html', title="Blogs", blogs=blogs,
+        return render_template('newpost.html', title="Blogs",
                                blog_title=blog_title, blog_body=blog_body,
                                blog_title_error=blog_title_error, blog_body_error=blog_body_error)
-    else: # actual adding of new blog to db
-        new_blog = Blog(blog_title, blog_body)
-        db.session.add(new_blog)
-        db.session.commit()
-        blogs = Blog.query.all()
-        return render_template('blogs.html', title="Blogs", blogs=blogs,
-                               blog_title=blog_title, blog_body=blog_body,
-                               blog_title_error=blog_title_error, blog_body_error=blog_body_error)
+    # add new blog to DB
+    else:
+        create_new_blog(blog_title, blog_body)
+        # on successful creation, show that new blog entry
+        return render_template('id.html', title="Blogs", blog=blog, blogs=blogs,
+                               blog_title=blog_title, blog_body=blog_body, id=id)
+
+@app.route("/delete_blog", methods=['GET', 'POST'])
+def delete_blog():
+    """Remove a blog from /blog."""
+    deleting_blog()
+    return redirect('/blog')
+
+@app.route("/delete_blog2", methods=['GET', 'POST'])
+def delete_blog2():
+    """Remove a blog from /blogs. Added for different redirect for /blogs"""
+    deleting_blog()
+    return redirect('/blogs') # better bc returns to page without /delete_blog in url
+
+@app.route("/delete_blog3", methods=['GET', 'POST'])
+def delete_blog3():
+    """Remove a blog from /id. Just redirects to blog where the same button actually can delete."""
+    return redirect('/blog')
+
+@app.route("/blog")
+def blog(blog_title='', blog_body=''):
+    """Lists all blogs. Does not allow new blog creation nor validation.
+        aka if given the correct url the id template will render all 3 requested
+            http://localhost:5000/blog?id=366&blog_title=title&blog_body=body
+        otherwise:
+            http://localhost:5000/blog"""
+    if request.args:
+        blog_title = get_title()
+        blog_body = get_body()
+        # return "blog-id: %s <br> blog_title: %s <br> blog_body: %s" % (id, blog_title, blog_body)
+        return render_template('id.html', title="Blogs",
+                               blog_title=blog_title, blog_body=blog_body)
+    else:
+        blogs = query_all_blogs_lifo()
+        return render_template('blog.html', title="Blogs", blogs=blogs,
+                               blog_title=blog_title, blog_body=blog_body)
+
+@app.route("/blogs")
+def blogs(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
+          prev_blog_title='', prev_blog_body='', blogs=''):
+    """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
+    blogs = query_all_blogs_lifo()
+    # add to database
+    if request.args: # if request.method == 'GET':
+        blog_title = get_title()
+        blog_body = get_body()
+    # else: # used to not validate first time rendered
+    #     return render_template('blogs.html', title="Blogs", blogs=blogs,
+    #                            blog_title=blog_title, blog_body=blog_body,
+    #                            blog_title_error=blog_title_error, blog_body_error=blog_body_error)
+
+    # Validation Section # make sure that
+    # last blog is not the same as next blog
+    blog_count = Blog.query.count()
+    if blog_count:
+        prev_blog_title = Blog.query.order_by('-id').first().title
+        prev_blog_body = Blog.query.order_by('-id').first().body
+
+    if blogs_have_same_content(prev_blog_title, blog_title, prev_blog_body, blog_body):
+        blog_title_error = 'Blogs must be different'
+    # not blank
+    if no_field_blank(blog_title, blog_body):
+        blog_title_error = 'Must not leave any field blank'
+    # actual adding of new blog to DB
+    if not blog_title_error or blog_body_error:
+        create_new_blog(blog_title, blog_body)
+        blogs = query_all_blogs_lifo()
+
+    # no errors on page or rerender page with errors
+    return render_template('blogs.html', title="Blogs", blogs=blogs,
+                           blog_title=blog_title, blog_body=blog_body,
+                           blog_title_error=blog_title_error, blog_body_error=blog_body_error)
+
+# Section added to DRY up the code
+def get_title():
+    """Accessing get request parameters of title."""
+    return request.args.get('blog_title')
+
+def get_body():
+    """Accessing get request parameters of body."""
+    return request.args.get('blog_body')
+
+def query_all_blogs_fifo():
+    """FIFO query all blogs, aka order of first appearance order."""
+    return Blog.query.all()
+
+def query_all_blogs_lifo():
+    """LIFO query all blogs, aka reverse order."""
+    return Blog.query.order_by(Blog.title.desc()).all()
+
+def deleting_blog():
+    """Delete a blog by blog-id we use request parameters and session."""
+    blog_id = int(request.form['blog-id'])
+    blog_target = Blog.query.get(blog_id)
+    db.session.delete(blog_target)
+    db.session.commit()
+    # blogs = query_all_blogs_lifo()
+    # return render_template('blogs.html', title="Blogs", blogs=blogs) # works
+
+def create_new_blog(blog_title='', blog_body=''):
+    """Create a new blog using session."""
+    blog = Blog(blog_title, blog_body)
+    db.session.add(blog)
+    db.session.commit()
+    return blog
 
 # interesting experiment section
+@app.route("/example", methods=['POST', 'GET'])
+def example():
+    """Very simple example of routing and template rendering."""
+    return render_template('example.html')
+
     # @app.route('/blog/<int:blog_id>')
     # def show_blog(blog_id):
     #     """show the post with the given id, the id is an integer
@@ -166,7 +179,7 @@ def blogs(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
     #     return render_template('id.html', title="Blogs", id=id)
 
     # @app.route("/blog")
-    # def bloggy(blog_title='', blog_body='', blogs='', prev_blog_title='',prev_blog_body=''):
+    # def bloggy(blog_title='', blog_body='', blogs='', prev_blog_title='', prev_blog_body=''):
     #     """This allows for params to be accessed but not /blog without it.
     #     http://localhost:5000/blog?id=366"""
     #     if request.args:

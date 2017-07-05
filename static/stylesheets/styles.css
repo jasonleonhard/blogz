@@ -17,9 +17,11 @@ ul { list-style: none; }
 
 .error { color: red; }
 
+.no_top_margin { margin-top: 0; }
+
 .no_padding { padding: 0; }
 .pad { padding-top: 1%; }
-.pad_left { padding-left: 55px; }
+.pad_left { padding-left: 20px; }
 .pad-bottom { padding-bottom: 5px; }
 
 .left { float: left; }
