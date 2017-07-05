@@ -9,39 +9,7 @@
             <div class="col-xs-12">
                <form class="form-horizontal">
                     <div class="form-group">
-                        <form>
-                            <label class="col-form-label">
-                                New Blog:
-                                <label class="col-form-label">Title:
-                                    <input class='form-control' type="text" name='blog_title' value="{{blog_title}}" />
-                                </label>
-                                <label class="col-form-label">Body:
-                                    <input class='form-control' type="text" name='blog_body' value="{{blog_body}}" />
-                                </label>
-                            </label>
-                            <input class='btn btn-primary' type="submit" value='Add blog' />
-                        </form>
-                        <hr />
-                        <strong class='error' value="{{blog_body_error}}">{{blog_body_error}}</strong>
-                        <strong class='error' value="{{blog_title_error}}">{{blog_title_error}}</strong>
-                        <!--blog entries in db-->
-                        {% if blogs %}
-                            <ul>
-                                {% for blog in blogs %}
-                                    <li>
-                                        <h3>{{blog.title}}</h3>
-                                        <p>{{blog.body}}</p>
-                                        <!--delete blog-->
-                                        <form method="POST" action="/delete_blog" style="display:inline-block;">
-                                            <input type="hidden" name="blog-id" value="{{blog.id}}"  /><!--type="button" -->
-                                            <input type="submit" value="Done" class="btn btn-primary"/>
-                                        </form>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p class="error">No blogs yet</p>
-                        {% endif %}
+                        <h3>{{directions}}</h3>
                     </div>
                 </form>
             </div>

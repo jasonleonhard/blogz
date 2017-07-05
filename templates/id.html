@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-xs-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h1>{{title}}</h1>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-12">
+               <form class="form-horizontal">
+                    <form></form>
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                            <form method="POST" action="/delete_blog3" class='left'>
+                                <!--<input type="hidden" name="blog-id" value="{ { blog.id}}"/>-->
+                                <input type="hidden" name="blog-id" value="{{id}}"/>
+                                <input type="submit" value="Done" class="btn btn-primary"/>
+                            </form>
+                            <div class="left pad_left">
+                                <!--<b>{{id}}</b>-->
+                                <h3 class='no_top_margin'>{{blog_title}}</h3>
+                                <p>{{blog_body}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
