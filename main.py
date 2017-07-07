@@ -25,6 +25,58 @@ def index():
     """Renders links. Could also become a splash screen or signin."""
     return render_template('index.html', title='Greetings', directions='Links provided below.')
 
+@app.route("/blog")
+def blog(blog_title='', blog_body=''):
+    """Lists all blogs. Does not allow new blog creation nor validation.
+        aka if given the correct url the id template will render all 3 requested
+            http://localhost:5000/blog?id=366&blog_title=title&blog_body=body
+        otherwise:
+            http://localhost:5000/blog"""
+    if request.args:
+        blog_title = get_title()
+        blog_body = get_body()
+        # return "blog-id: %s <br> blog_title: %s <br> blog_body: %s" % (id, blog_title, blog_body)
+        return render_template('id.html', title="Blogs",
+                               blog_title=blog_title, blog_body=blog_body)
+    else:
+        blogs = query_all_blogs_lifo()
+        return render_template('blog.html', title="Blogs", blogs=blogs,
+                               blog_title=blog_title, blog_body=blog_body)
+
+@app.route("/blogs")
+def blogs(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
+          prev_blog_title='', prev_blog_body='', blogs=''):
+    """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
+    blogs = query_all_blogs_lifo()
+    # add to database
+    if request.args: # if request.method == 'GET':
+        blog_title = get_title()
+        blog_body = get_body()
+    else: # Avoid validation first time template is rendered
+        return render_template('blogs.html', title="Blogs", blogs=blogs,
+                               blog_title=blog_title, blog_body=blog_body)
+    # Validation Section # make sure that
+    # last blog is not the same as next blog
+    blog_count = Blog.query.count()
+    if blog_count:
+        prev_blog_title = Blog.query.order_by('-id').first().title
+        prev_blog_body = Blog.query.order_by('-id').first().body
+
+    if blogs_have_same_content(prev_blog_title, blog_title, prev_blog_body, blog_body):
+        blog_title_error = 'Blogs must be different'
+    # not blank
+    if no_field_blank(blog_title, blog_body):
+        blog_title_error = 'Must not leave any field blank'
+    # actual adding of new blog to DB
+    if not blog_title_error or blog_body_error:
+        create_new_blog(blog_title, blog_body)
+        blogs = query_all_blogs_lifo()
+
+    # no errors on page or rerender page with errors
+    return render_template('blogs.html', title="Blogs", blogs=blogs,
+                           blog_title=blog_title, blog_body=blog_body,
+                           blog_title_error=blog_title_error, blog_body_error=blog_body_error)
+
 @app.route("/newpost")
 def newpost(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
             prev_blog_title='', prev_blog_body=''):
@@ -32,6 +84,9 @@ def newpost(blog_title='', blog_body='', blog_title_error='', blog_body_error=''
     if request.args: # if request.method == 'GET':
         blog_title = get_title()
         blog_body = get_body()
+    else: # Avoid validation first time template is rendered
+        return render_template('newpost.html', title="Blogs", blogs=blogs,
+                               blog_title=blog_title, blog_body=blog_body)
     # Validation Section # make sure that
     # last blog is not the same as next blog
     blog_count = Blog.query.count()
@@ -71,60 +126,6 @@ def delete_blog2():
 def delete_blog3():
     """Remove a blog from /id. Just redirects to blog where the same button actually can delete."""
     return redirect('/blog')
-
-@app.route("/blog")
-def blog(blog_title='', blog_body=''):
-    """Lists all blogs. Does not allow new blog creation nor validation.
-        aka if given the correct url the id template will render all 3 requested
-            http://localhost:5000/blog?id=366&blog_title=title&blog_body=body
-        otherwise:
-            http://localhost:5000/blog"""
-    if request.args:
-        blog_title = get_title()
-        blog_body = get_body()
-        # return "blog-id: %s <br> blog_title: %s <br> blog_body: %s" % (id, blog_title, blog_body)
-        return render_template('id.html', title="Blogs",
-                               blog_title=blog_title, blog_body=blog_body)
-    else:
-        blogs = query_all_blogs_lifo()
-        return render_template('blog.html', title="Blogs", blogs=blogs,
-                               blog_title=blog_title, blog_body=blog_body)
-
-@app.route("/blogs")
-def blogs(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
-          prev_blog_title='', prev_blog_body='', blogs=''):
-    """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
-    blogs = query_all_blogs_lifo()
-    # add to database
-    if request.args: # if request.method == 'GET':
-        blog_title = get_title()
-        blog_body = get_body()
-    # else: # used to not validate first time rendered
-    #     return render_template('blogs.html', title="Blogs", blogs=blogs,
-    #                            blog_title=blog_title, blog_body=blog_body,
-    #                            blog_title_error=blog_title_error, blog_body_error=blog_body_error)
-
-    # Validation Section # make sure that
-    # last blog is not the same as next blog
-    blog_count = Blog.query.count()
-    if blog_count:
-        prev_blog_title = Blog.query.order_by('-id').first().title
-        prev_blog_body = Blog.query.order_by('-id').first().body
-
-    if blogs_have_same_content(prev_blog_title, blog_title, prev_blog_body, blog_body):
-        blog_title_error = 'Blogs must be different'
-    # not blank
-    if no_field_blank(blog_title, blog_body):
-        blog_title_error = 'Must not leave any field blank'
-    # actual adding of new blog to DB
-    if not blog_title_error or blog_body_error:
-        create_new_blog(blog_title, blog_body)
-        blogs = query_all_blogs_lifo()
-
-    # no errors on page or rerender page with errors
-    return render_template('blogs.html', title="Blogs", blogs=blogs,
-                           blog_title=blog_title, blog_body=blog_body,
-                           blog_title_error=blog_title_error, blog_body_error=blog_body_error)
 
 # Section added to DRY up the code
 def get_title():
