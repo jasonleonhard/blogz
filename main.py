@@ -161,11 +161,6 @@ def create_new_blog(blog_title='', blog_body=''):
     return blog
 
 # interesting experiment section
-@app.route("/example", methods=['POST', 'GET'])
-def example():
-    """Very simple example of routing and template rendering."""
-    return render_template('example.html')
-
     # @app.route('/blog/<int:blog_id>')
     # def show_blog(blog_id):
     #     """show the post with the given id, the id is an integer
@@ -188,22 +183,6 @@ def example():
     #         title = request.args.get('title') # none to grab
     #         body = request.args.get('body')
     #         return "blog-id: %s <br> title: %s <br> body: %s" % (id, title, body)
-
-    # # /blog?id=6
-    # @app.route("/individual", methods=['GET', 'POST'])
-    # def individual(id = ''):
-    #     # if request.args: # if request.method == 'GET':
-    #     # if request.args.id: # if request.method == 'GET':
-    #     #     id = int(id)
-    #     # else:
-    #     #     id = int(0)
-    #     form_value = request.args.get('param_name')
-    #     # request.args.get = 6
-    #     # http://localhost:5000/blog?id=6
-    #     # return render_template('individual.html', title="Blogs",
-    #     #                     blog_title=blog_title, blog_body=blog_body,
-    #     #                     blog_title_error=blog_title_error, blog_body_error=blog_body_error)
-    #     return render_template('individual.html', title="Blogs", id=id)
 
 # disable browser caching
 @app.after_request
