@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-xs-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h1>{{title}}</h1>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-12">
+
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr>
+                            <th>session</th>
+                            <th>session['username']</th>
+                            <th>session['password']</th>
+
+                            <th>user</th>
+                            <th>user.username</th>
+                            <th>user.password</th>
+                            <th>user.id</th>
+                        </tr>
+                        <tr>
+                            <td>{{session}}</td>
+                            <td>{{session['username']}}</td>
+                            <td>{{session['password']}}</td>
+
+                            {% if users %}
+                                {% for user in users %}
+                                    <td>{{user}}</td>
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.password}}</td>
+                                    <td>{{user.id}}</td>
+                                {% endfor %}
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="form-group">
+                    <!--<form>-->
+                    <form action="/signup" method="POST">
+                        <label class="col-form-label">
+                            <!--<span class="label label-default">New User:</span>-->
+                            <label class="col-form-label">
+                                <span class="label label-default">Username:</span>
+                                <!--type=username???? or type=text?????-->
+                                <input class='form-control' type="username" name='username' value="{{username}}" />
+                            </label>
+                            <label class="col-form-label">
+                                <span class="label label-default">Password:</span>
+                                <input class='form-control' type="password" name='password' value="{{password}}" />
+                            </label>
+                        </label>
+                        <input class='btn btn-primary' type="submit" value='Add User' />
+                    </form>
+                </div>
+                <strong class='error' value="{{password_error}}">{{password_error}}</strong>
+                <strong class='error' value="{{username_error}}">{{username_error}}</strong>
+
+                {% if users %}
+                <!--{ % if users|length == 0 %}-->
+                    {% for user in users %}
+                        <div class='panel panel-default'>
+                            <div class='panel-body'>
+                                <h3 class='no_top_margin'>{{user.username}}</h3>
+                                <p>{{user.password}}</p>
+
+                                <!--only able to delete if its your post-->
+                                <!--{ % if user.username == session['username'] %}-->
+
+                                    <form method="POST" action="/delete-user">
+                                        <input type="hidden" name="user-id" value="{{user.id}}">
+                                        <input type="submit" value="Delete User?" class='btn btn-primary btn-xs'>
+                                    </form>
+                                <!--{ % endif %}-->
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <b class="error">
+                        No users signed up yet</b>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
