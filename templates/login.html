@@ -9,66 +9,24 @@
         </div>
         <div class="panel-body">
             <div class="col-xs-12">
-
-                    <div class="form-group">
-                        <form action="/login" method="post">
+                <div class="form-group">
+                    <form action="/login" method="post">
+                        <label class="col-form-label">
+                            <span class="label label-default">New User:</span>
                             <label class="col-form-label">
-                                <span class="label label-default">New User:</span>
-                                <label class="col-form-label">
-                                    <span class="label label-default">Username:</span>
-                                    <input class='form-control' type="text" name="username" value="{{username}}" />
-                                </label>
-                                <label class="col-form-label">
-                                    <span class="label label-default">Password:</span>
-                                    <input class='form-control' type="password" name="password" value="{{password}}" />
-                                </label>
+                                <span class="label label-default">Username:</span>
+                                <input class='form-control' type="text" name="username" value="{{username}}" />
                             </label>
-                            <input class='btn btn-primary' type="submit" value='Add User' />
-                        </form>
-                    </div>
-                    <strong class='error' value="{{password_error}}">{{password_error}}</strong>
-                    <strong class='error' value="{{username_error}}">{{username_error}}</strong>
-
-{% if users %}
-    {% for user in users %}
-        {% if user.username == session['username'] %}
-            <div class='panel panel-default '>
-                <div class='panel-body'>
-                    <h3 class='no_top_margin'>Current Log in in user:</h3>
-                    <div><b>{{session}}</b></div>
-                    <div><b>{{session['username']}}</b></div>
-                    <div><b>{{session['password']}}</b></div>
+                            <label class="col-form-label">
+                                <span class="label label-default">Password:</span>
+                                <input class='form-control' type="password" name="password" value="{{password}}" />
+                            </label>
+                        </label>
+                        <input class='btn btn-primary' type="submit" value='Add User' />
+                    </form>
                 </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-    <table class="table table-condensed">
-        <tbody>
-            <tr>
-                <th>session</th>
-                <th>session['username']</th>
-                <th>session['password']</th>
-                <th>user</th>
-                <th>user.username</th>
-                <th>user.password</th>
-                <th>user.id</th>
-            </tr>
-            <tr>
-                <td>{{session}}</td>
-                <td>{{session['username']}}</td>
-                <td>{{session['password']}}</td>
-                {% for user in users %}
-                    <td>{{user}}</td>
-                    <td>{{user.username}}</td>
-                    <td>{{user.password}}</td>
-                    <td>{{user.id}}</td>
-                {% endfor %}
-            </tr>
-        </tbody>
-    </table>
-{% else %}
-    <b class="error">Not logged in yet</b>
-{% endif %}
+                <strong class='error' value="{{password_error}}">{{password_error}}</strong>
+                <strong class='error' value="{{username_error}}">{{username_error}}</strong>
 
             </div>
         </div>
