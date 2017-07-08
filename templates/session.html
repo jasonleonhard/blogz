@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-xs-12">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="col-xs-12">
+
+                {% if users %}
+                    {% for user in users %}
+                        {% if user.username == session['username'] %}
+                            <div class='panel panel-default '>
+                                <div class='panel-body'>
+                                    <h3 class='no_top_margin'>Current Log in in user:</h3>
+                                    <div><b>{{session}}</b></div>
+                                    <div><b>{{session['username']}}</b></div>
+                                    <div><b>{{session['password']}}</b></div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <table class="table table-condensed">
+                        <tbody>
+                            <tr>
+                                <th>session</th>
+                                <th>session['username']</th>
+                                <th>session['password']</th>
+                                <th>user</th>
+                                <th>user.username</th>
+                                <th>user.password</th>
+                                <th>user.id</th>
+                            </tr>
+                            <tr>
+                                <td>{{session}}</td>
+                                <td>{{session['username']}}</td>
+                                <td>{{session['password']}}</td>
+                                {% for user in users %}
+                                    <td>{{user}}</td>
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.password}}</td>
+                                    <td>{{user.id}}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                {% else %}
+                    <b class="error">Not logged in yet</b>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
