@@ -1,29 +1,37 @@
-"""CRUD functionality for blogging."""
-from flask import Flask, request, url_for, render_template, redirect
+"""CRUD functionality for users blogging."""
+from flask import Flask, request, redirect, render_template, session, flash #, url_for
 from flask_sqlalchemy import SQLAlchemy
 from lib import *
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:ornottodo@localhost:8889/build-a-blog'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:dingosrule@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
+app.secret_key = 'y337kGcys&zP3B' # req to have SecureCookieSession on sign up
+
+class User(db.Model):
+    """User class definition and init."""
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120))
+    blogs = db.relationship('Blog', backref='owner') # lazy='dynamic')
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
 class Blog(db.Model):
     """Blog class definition and init."""
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120))
-    body = db.Column(db.String(120))
+    title = db.Column(db.String(120), unique=True)
+    body = db.Column(db.String(120), unique=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, body):
+    def __init__(self, title, body, owner):
         self.title = title
         self.body = body
-
-@app.route("/")
-def index():
-    """Renders links. Could also become a splash screen or signin."""
-    return render_template('index.html', title='Greetings', directions='Links provided below.')
+        self.owner = owner
 
 @app.route("/blog")
 def blog(blog_title='', blog_body=''):
@@ -78,7 +86,7 @@ def blogs(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
                            blog_title_error=blog_title_error, blog_body_error=blog_body_error)
 
 @app.route("/newpost")
-def newpost(blog_title='', blog_body='', blog_title_error='', blog_body_error='',
+def newpost(user, blog_title='', blog_body='', blog_title_error='', blog_body_error='',
             prev_blog_title='', prev_blog_body=''):
     """Create new blog and validate. Does not list blogs."""
     if request.args: # if request.method == 'GET':
@@ -120,7 +128,7 @@ def delete_blog():
 def delete_blog2():
     """Remove a blog from /blogs. Added for different redirect for /blogs"""
     deleting_blog()
-    return redirect('/blogs') # better bc returns to page without /delete_blog in url
+    return redirect('/blogs')
 
 @app.route("/delete_blog3", methods=['GET', 'POST'])
 def delete_blog3():
@@ -144,14 +152,9 @@ def query_all_blogs_lifo():
     """LIFO query all blogs, aka reverse order."""
     return Blog.query.order_by(Blog.title.desc()).all()
 
-def deleting_blog():
-    """Delete a blog by blog-id we use request parameters and session."""
-    blog_id = int(request.form['blog-id'])
-    blog_target = Blog.query.get(blog_id)
-    db.session.delete(blog_target)
-    db.session.commit()
-    # blogs = query_all_blogs_lifo()
-    # return render_template('blogs.html', title="Blogs", blogs=blogs) # works
+def query_all_users_lifo():
+    """LIFO query all blogs, aka reverse order."""
+    return User.query.order_by(User.username.desc()).all()
 
 def create_new_blog(blog_title='', blog_body=''):
     """Create a new blog using session."""
@@ -160,29 +163,42 @@ def create_new_blog(blog_title='', blog_body=''):
     db.session.commit()
     return blog
 
-# interesting experiment section
-    # @app.route('/blog/<int:blog_id>')
-    # def show_blog(blog_id):
-    #     """show the post with the given id, the id is an integer
-    #     This works to show an id by its url ie http://localhost:5000/blog/368"""
-    #     return 'blog %d' % blog_id
+@app.route('/signup', methods=['POST', 'GET'])
+def signup(users=''):
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        # TODO - validate user's data
+        existing_user = User.query.filter_by(username=username).first()
+        if not existing_user:
+            new_user = User(username, password)
+            db.session.add(new_user)
+            db.session.commit()
+            users = query_all_users_lifo()
+            session['username'] = username
+            session['password'] = password
+        else:
+            username_error = "Duplicate user"
+            return render_template('signup.html', title='Sign up', users=users, username_error=username_error)
 
-    # @app.route('/blog<int:id>')
-    # def show_one_blog(id):
-    #     """Sort of works for individual blog by id... http://localhost:5000/blog368"""
-    #     # id = id
-    #     id = Blog.query.get(id)
-    #     return render_template('id.html', title="Blogs", id=id)
+    users = query_all_users_lifo()
+    return render_template('signup.html', title='Sign up', users=users)
+    # return render_template('signup.html', title='Sign up', username=username, password=password)
 
-    # @app.route("/blog")
-    # def bloggy(blog_title='', blog_body='', blogs='', prev_blog_title='', prev_blog_body=''):
-    #     """This allows for params to be accessed but not /blog without it.
-    #     http://localhost:5000/blog?id=366"""
-    #     if request.args:
-    #         id = request.args.get('id') # grabbing yes
-    #         title = request.args.get('title') # none to grab
-    #         body = request.args.get('body')
-    #         return "blog-id: %s <br> title: %s <br> body: %s" % (id, title, body)
+@app.route('/delete-user', methods=['GET', 'POST'])
+def delete_user():
+    """Delete user works. grabs hidden user id from form, queries by it and deletes with db commit."""
+    if request.method == 'POST':
+        user_id = int(request.form['user-id'])
+        user = User.query.get(user_id)
+        db.session.delete(user)
+        db.session.commit()
+        return redirect('/signup')
+
+@app.route("/")
+def index():
+    """Renders links. Could also become a splash screen or signin."""
+    return render_template('index.html', title='Greetings', directions='Links provided below.')
 
 # disable browser caching
 @app.after_request
