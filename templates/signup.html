@@ -8,43 +8,12 @@
         <div class="panel-body">
             <div class="col-xs-12">
 
-                <table class="table table-condensed">
-                    <tbody>
-                        <tr>
-                            <th>session</th>
-                            <th>session['username']</th>
-                            <th>session['password']</th>
-
-                            <th>user</th>
-                            <th>user.username</th>
-                            <th>user.password</th>
-                            <th>user.id</th>
-                        </tr>
-                        <tr>
-                            <td>{{session}}</td>
-                            <td>{{session['username']}}</td>
-                            <td>{{session['password']}}</td>
-
-                            {% if users %}
-                                {% for user in users %}
-                                    <td>{{user}}</td>
-                                    <td>{{user.username}}</td>
-                                    <td>{{user.password}}</td>
-                                    <td>{{user.id}}</td>
-                                {% endfor %}
-                            {% endif %}
-                        </tr>
-                    </tbody>
-                </table>
-
                 <div class="form-group">
-                    <!--<form>-->
                     <form action="/signup" method="POST">
                         <label class="col-form-label">
-                            <!--<span class="label label-default">New User:</span>-->
+                            <span class="label label-default">New User:</span>
                             <label class="col-form-label">
                                 <span class="label label-default">Username:</span>
-                                <!--type=username???? or type=text?????-->
                                 <input class='form-control' type="username" name='username' value="{{username}}" />
                             </label>
                             <label class="col-form-label">
@@ -81,6 +50,50 @@
                     <b class="error">
                         No users signed up yet</b>
                 {% endif %}
+
+
+{% if users %}
+    {% for user in users %}
+        {% if user.username == session['username'] %}
+            <div class='panel panel-default '>
+                <div class='panel-body'>
+                    <h3 class='no_top_margin'>Current Log in in user:</h3>
+                    <div><b>{{session}}</b></div>
+                    <div><b>{{session['username']}}</b></div>
+                    <div><b>{{session['password']}}</b></div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <table class="table table-condensed">
+        <tbody>
+            <tr>
+                <th>session</th>
+                <th>session['username']</th>
+                <th>session['password']</th>
+                <th>user</th>
+                <th>user.username</th>
+                <th>user.password</th>
+                <th>user.id</th>
+            </tr>
+            <tr>
+                <td>{{session}}</td>
+                <td>{{session['username']}}</td>
+                <td>{{session['password']}}</td>
+                {% for user in users %}
+                    <td>{{user}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.password}}</td>
+                    <td>{{user.id}}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% else %}
+    <b class="error">Not logged in yet</b>
+{% endif %}
+
+
             </div>
         </div>
     </div>
