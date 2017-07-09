@@ -3,6 +3,7 @@
     <title>{{title}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!--favicon definition-->
     {% block head %}
     <link rel="shortcut icon" href="{{ url_for('static', filename = 'favicon.ico') }}"
@@ -10,6 +11,7 @@
     <link rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}"
     type="image/x-icon">
     {% endblock %}
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
@@ -24,15 +26,29 @@
 <body class="container">
     <div class="pad"></div>
     <div class='container'>
+        <div class="col-md-12">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="alert alert-info">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
         {% block content %}
         {% endblock  %}
         <footer class='footer navbar-fixed-bottom pad-bottom text-center'>
             <div class="col-md-12">
                 <a href="/"> <span class="label label-default">home</span></a>
-                <a href="/newpost"> <span class="label label-default">newpost</span></a>
                 <a href="/blog"> <span class="label label-default">blog</span></a>
                 <a href="/blogs"> <span class="label label-default">blogs</span></a>
-                <!--<a href="/individual"> <span class="label label-default">individual</span></a>-->
+                <a href="/signup"> <span class="label label-default">signup</span></a>
+                <a href="/login"> <span class="label label-default">login</span></a>
+                <a href="/logout"> <span class="label label-default">logout</span></a>
+                <a href="/userlist"> <span class="label label-default">userlist</span></a>
+                <a href="/session"> <span class="label label-default">session</span></a>
             </div>
         </footer>
     </div>
