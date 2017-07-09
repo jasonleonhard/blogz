@@ -31,7 +31,8 @@ ul { list-style: none; }
 table { border-collapse: collapse; }
 tr { display: block; float: left; }
 th, td { display: block; }
-.borderless td, .borderless th { border: none !important; }
+.borderless td, .borderless th, .borderless tbody { border: none !important; }
+td, th, tbody { border: none !important; }
 
 .formy {
     display: inline-block;
