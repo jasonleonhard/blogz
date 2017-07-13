@@ -5,11 +5,11 @@
     {% if session %}
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
     {% endif %}
-    <div class="panel panel-primary see_through01">
-        <div class="panel-heading">
-            <h1 class='mt0 mb0'>{{title}}</h1>
-        </div>
-        {% if blogs %}
+    {% if blogs %}
+        <div class="panel panel-primary see_through01">
+            <div class="panel-heading">
+                <h1 class='mt0 mb0'>{{title}}</h1>
+            </div>
             {% for blog in blogs %}
                 <!--double checking-->
                 <!-- { % if blog.owner.id == owner_id %} -->
@@ -35,14 +35,16 @@
                     </div>
                 </div>
                 <!-- { % endif %} -->
-            {% endfor %}
-        {% else %}
-            <p class="error">{{blog_error}}</p>
-            <p class="error">No blogs yet</p>
-            <p>
-                <b class="error">{{username}} has not written any blogs yet.</b>
-            </p>
-        {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class='mt0 mb0'>{{title}}</h1>
+            </div>
+        </div>
+        <p class="error">{{blog_error}}</p>
+        <b class="alert alert-info">{{username}} has not written any blogs yet.</b>
+    {% endif %}
     </div>
 </div>
 <div class="col-lg-4"></div>
