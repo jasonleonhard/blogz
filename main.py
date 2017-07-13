@@ -301,7 +301,8 @@ def blog(blog_title='', blog_body='', blog_id=''):
         blog_title = get_title()
         blog_body = get_body()
         blog_id = get_id()
-        blog_owner = get_owner()
+        blog = Blog.query.get(blog_id)
+        blog_owner = blog.owner.username
         return render_template('id.html', title="Blog",
                                blog_title=blog_title, blog_body=blog_body, blog_id=blog_id, blog_owner=blog_owner)
     else:
@@ -421,7 +422,7 @@ def get_body():
 
 def get_id():
     """Accessing get request parameters of body."""
-    return request.args.get('blog_body')
+    return request.args.get('id')
 
 def get_owner():
     """Accessing get request parameters of body."""
