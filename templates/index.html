@@ -1,18 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="col-xs-12">
+    {% if session %}
+        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+    {% endif %}
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h1>{{title}}</h1>
+            <h1 class='mt0 mb0'>{{title}}</h1>
+            <p>If you don't have an account, you may <a href="/signup">Sign up</a> for one</p>
         </div>
         <div class="panel-body">
-            <div class="col-xs-12">
-               <form class="form-horizontal">
-                    <div class="form-group">
-                        <h5>{{directions}}</h5>
-                    </div>
-                </form>
-            </div>
+            <p>
+                <b>{{directions}}</b>
+            </p>
+            <strong class='error' value="{{password_error}}">{{password_error}}</strong>
+            <strong class='error' value="{{username_error}}">{{username_error}}</strong>
+            {% if users %}
+                {% for user in users %}
+                    <a href="singleuser?username={{user.username}}&user_id={{user.id}}">
+                        <span class="label label-default">{{user.username}}</span>
+                        <!--<b> { { user.blogs}}</b>-->
+                    </a>
+                {% endfor %}
+            {% else %}
+                <b class="error">No users signed up yet</b>
+            {% endif %}
         </div>
     </div>
 </div>

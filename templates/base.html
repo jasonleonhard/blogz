@@ -12,7 +12,7 @@
     type="image/x-icon">
     {% endblock %}
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -21,36 +21,40 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/scripts.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/scripts.js') }}"></script>
 </head>
 <body class="container">
     <div class="pad"></div>
-    <div class='container'>
-        <div class="col-md-12">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <ul class="alert alert-info">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
-        </div>
-        {% block content %}
-        {% endblock  %}
-        <footer class='footer navbar-fixed-bottom pad-bottom text-center'>
-            <div class="col-md-12">
-                <a href="/"> <span class="label label-default">home</span></a>
-                <a href="/blog"> <span class="label label-default">blog</span></a>
-                <a href="/blogs"> <span class="label label-default">blogs</span></a>
-                <a href="/signup"> <span class="label label-default">signup</span></a>
-                <a href="/login"> <span class="label label-default">login</span></a>
-                <a href="/logout"> <span class="label label-default">logout</span></a>
-                <a href="/userlist"> <span class="label label-default">userlist</span></a>
-                <a href="/session"> <span class="label label-default">session</span></a>
-            </div>
-        </footer>
+        <div class="col-xs-12">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="alert alert-info">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     </div>
+    {% block content %}
+    {% endblock  %}
+    <footer class='footer navbar-fixed-bottom pad-bottom text-center'>
+        <div class="col-md-12">
+            <a href="/"><span class="label label-default">home</span></a>
+            <a href="/signup"><span class="label label-default">signup</span></a>
+            <a href="/login"><span class="label label-default">login</span></a>
+            <a href="/logout"><span class="label label-default">logout</span></a>
+            <a href="/userlist"><span class="label label-default">userlist</span></a>
+            <a href="/session"><span class="label label-default">session</span></a>
+            <a href="/newpost"><span class="label label-default">newpost</span></a>
+            <a href="/blog"><span class="label label-default">blog</span></a>
+            <a href="/blogs"><span class="label label-default">blogs</span></a>
+            <a href="/myblogs"><span class="label label-default">myblogs</span></a>
+            <a href="/randstr"><span class="label label-default">randstr</span></a>
+            <a href="/salt"><span class="label label-default">salt</span></a>
+            <a href="/"><span class="label label-default">singleuser</span></a>
+            <a href="/duck"><span class="label label-default">duck</span></a>
+        </div>
+    </footer>
 </body>
 </html>

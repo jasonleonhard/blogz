@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-xs-12">
+    {% if session %}
+        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+    {% endif %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h1 class='mt0 mb0'>{{title}}</h1>
+        </div>
+        <div class="panel-body">
+            {% if blogs %}
+                {% for blog in blogs %}
+                    <!--double checking-->
+                     {% if blog.owner.id == owner_id %}
+                        <div class='panel panel-default mb1'>
+                            <div class='panel-body'>
+                                <form method="POST" action="/delete_blog" class='left'>
+                                    <input type="hidden" name="blog-id" value="{{blog.id}}"/>
+                                    <input type="submit" value="Delete" class="btn btn-primary"/>
+                                </form>
+                                <div class="left pad_left">
+                                    <a href="{{ url_for('blog', id=blog.id, blog_title=blog.title, blog_body=blog.body) }}">
+                                        <h3 class='no_top_margin'>
+                                            <p>{{blog.title}}</p>
+                                        </h3>
+                                    </a>
+                                    <p>{{blog.body}}</p>
+                                    <span class="label label-default">{{blog.owner.username}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>
+                    <b class="error">{{username}} has not written any blogs yet.</b>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock  %}
+
+

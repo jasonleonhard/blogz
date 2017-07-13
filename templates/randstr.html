@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-xs-12">
+    {% if session %}
+        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+    {% endif %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h1 class='mt0 mb0'>{{title}}</h1>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <form action="/randstr" method="POST">
+                        <label class="col-form-label">
+                            <label class="col-form-label">
+
+                                <span class="label label-default">Hashed Password:</span>
+                                <input class='form-control' type="text" name='hashed_password' value="{{hashed_password}}">
+
+                            </label>
+                        </label>
+                        <input class='btn btn-primary' type="submit" value='Random String'>
+                    </form>
+                </div>
+                <strong class='error' value="{{password_error}}">{{password_error}}</strong>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}

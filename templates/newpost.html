@@ -1,32 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-xs-12">
+<div class="col-lg-4"></div>
+<div class="col-lg-4">
+    {% if session %}
+        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+    {% endif %}
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h1>{{title}}</h1>
+            <h1 class='mt0 mb0'>{{title}}</h1>
         </div>
-        <div class="panel-body">
-            <div class="col-xs-12">
-               <form class="form-horizontal">
-                    <div class="form-group">
-                        <form>
-                            <label class="col-form-label">
-                                New Blog:
-                                <label class="col-form-label">Title:
-                                    <input class='form-control' type="text" name='blog_title' value="{{blog_title}}" />
-                                </label>
-                                <label class="col-form-label">Body:
-                                    <input class='form-control' type="text" name='blog_body' value="{{blog_body}}" />
-                                </label>
-                            </label>
-                            <input class='btn btn-primary' type="submit" value='Add blog' />
-                        </form>
-                    </div>
-                    <strong class='error' value="{{blog_body_error}}">{{blog_body_error}}</strong>
-                    <strong class='error' value="{{blog_title_error}}">{{blog_title_error}}</strong>
+        <div class='panel panel-default mb0'>
+            <div class="panel-body">
+                <form action="/newpost" method="POST">
+                    <span class="label label-default">Title</span>
+                    <input class='form-control' type="text" name='blog_title' value={{blog_title}}>
+
+                    <span class="label label-default wrap">Body</span>
+                    <textarea class='form-control' type="text" name='blog_body' value={{blog_body}}>{{blog_body}}</textarea>
+
+                    <input type="hidden" name='blog_body' value={{id}}>
+                    <div class="pad"></div>
+                    <input class='btn btn-primary' type="submit" value='Add blog'>
                 </form>
+                <strong class='error' value="{{blog_error}}">{{blog_error}}</strong>
             </div>
         </div>
     </div>
 </div>
+<div class="col-lg-4"></div>
 {% endblock  %}

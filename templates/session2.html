@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table table-condensed">
+    <tbody>
+        <tr>
+            <th>session</th>
+            <th>session['username']</th>
+            <th>session['password']</th>
+
+            <th>user</th>
+            <th>user.username</th>
+            <th>user.password</th>
+            <th>user.id</th>
+        </tr>
+        <tr>
+            <td>{{session}}</td>
+            <td>{{session['username']}}</td>
+            <td>{{session['password']}}</td>
+
+            {% if users %}
+                {% for user in users %}
+                    <td>{{user}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.password}}</td>
+                    <td>{{user.id}}</td>
+                {% endfor %}
+            {% endif %}
+        </tr>
+    </tbody>
+</table>
+{% endblock  %}

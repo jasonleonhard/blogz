@@ -1,57 +1,60 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="col-xs-12">
+    {% if session %}
+        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+    {% endif %}
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h1>{{title}}</h1>
+            <h1 class='mt0 mb0'>{{title}}</h1>
         </div>
         <div class="panel-body">
-            <div class="col-xs-12">
-                {% if users %}
-                    {% for user in users %}
-                        {% if user.username == session['username'] %}
-                            <div class='panel panel-default'>
-                                <div class='panel-body'>
-                                    <h3 class='no_top_margin'>Current Logged in User:</h3>
-                                    <div><b>{{session}}</b></div>
-                                    <div><b>{{session['username']}}</b></div>
-                                    <div><b>{{session['password']}}</b></div>
-                                    <div><b>{{session['id']}}</b></div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                    <div class='panel panel-default'>
-                        <div class='panel-body'>
-                            <table class="table table-condensed">
-                                <h3 class='no_top_margin'>Other Users:</h3>
-                                <tr>
-                                    <th>user</th>
-                                    <th>user.username</th>
-                                    <th>user.password</th>
-                                    <th>user.id</th>
-                                </tr>
-                                <tr>
-                                    {% for user in users %}
-                                        <td>{{user}}</td>
+            {% if users %}
+                {% for user in users %}
+                    {% if session['username'].upper() == user.username.upper() %}
+                        <div class='panel panel-primary mb1'>
+                            <div class='panel-body'>
+                                <table class="table table-condensed no_bottom_margin">
+                                    <span class="label label-default">Logged in User:</span>
+                                    <tr>
+                                        <th>user.username</th>
+                                        <th>user.password</th>
+                                        <th>user.id</th>
+                                    </tr>
+                                    <tr>
                                         <td>{{user.username}}</td>
                                         <td>{{user.password}}</td>
-                                        <td>{{user.id}}
-                                            <hr style="margin: 0;">
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                            </table>
+                                        <td>{{user.id}}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                {% else %}
-                    <b class="error">Not logged in yet</b>
-                {% endif %}
-            </div>
+                    {% else %}
+                        <div class='panel panel-default mb1'>
+                            <div class='panel-body'>
+                                <table class="table table-condensed no_bottom_margin">
+                                    <tr>
+                                        <th>user.username</th>
+                                        <th>user.password</th>
+                                        <th>user.id</th>
+                                    </tr>
+                                    <tr>
+                                    {% if user in users %}
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.password}}</td>
+                                        <td>{{user.id}}</td>
+                                        <!--<hr style="margin: 0;">-->
+                                    {% endif %}
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <b class="error">Not logged in yet</b>
+            {% endif %}
         </div>
     </div>
 </div>
 {% endblock  %}
-
-
-

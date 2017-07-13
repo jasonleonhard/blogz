@@ -1,35 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-xs-12">
-    <div class="panel panel-primary">
+<div class="col-lg-4"></div>
+<div class="col-lg-4">
+    {% if session %}
+        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+    {% endif %}
+    <div class="panel panel-primary see_through01">
         <div class="panel-heading">
-            <h1>{{title}}</h1>
-            <h1>Log in</h1>
-            <p>If you don't have an account, you may <a href="/register">register</a> for one</p>
+            <h1 class='mt0 mb0'>{{title}}</h1>
+            <p>If you don't have an account <a href="/signup">Sign up</a> for one</p>
         </div>
-        <div class="panel-body">
-            <div class="col-xs-12">
-                <div class="form-group">
-                    <form action="/login" method="post">
-                        <label class="col-form-label">
-                            <span class="label label-default">New User:</span>
-                            <label class="col-form-label">
-                                <span class="label label-default">Username:</span>
-                                <input class='form-control' type="text" name="username" value="{{username}}" />
-                            </label>
-                            <label class="col-form-label">
-                                <span class="label label-default">Password:</span>
-                                <input class='form-control' type="password" name="password" value="{{password}}" />
-                            </label>
-                        </label>
-                        <input class='btn btn-primary' type="submit" value='Add User' />
-                    </form>
-                </div>
+        <div class='panel panel-default mb3'>
+            <div class='panel-body see_through2'>
+                <form action="/login" method="POST">
+                    <div class="col-form-label">
+                        <span class="label label-default">Username:</span>
+                        <input class='form-control' type="username" name='username' value="{{username}}">
+                        <span class="label label-default">Password:</span>
+                        <input class='form-control' type="password" name='password' value="{{password}}">
+                    </div>
+                    <div class='pad'></div>
+                        <input class='btn btn-primary' type="submit" value='Log in'>
+                </form>
                 <strong class='error' value="{{password_error}}">{{password_error}}</strong>
                 <strong class='error' value="{{username_error}}">{{username_error}}</strong>
-
             </div>
         </div>
     </div>
 </div>
+<div class="col-lg-4"></div>
 {% endblock  %}

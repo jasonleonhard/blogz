@@ -11,6 +11,8 @@
         </div>
         {% if blogs %}
             {% for blog in blogs %}
+                <!--double checking-->
+                <!-- { % if blog.owner.id == owner_id %} -->
                 <div class='panel panel-default mb3'>
                     <div class='panel-body see_through2'>
                         <a href="{{ url_for('blog', id=blog.id, blog_title=blog.title, blog_body=blog.body) }}">
@@ -23,7 +25,6 @@
                             <!--linkable user tag-->
                             <a href="/singleuser?username={{blog.owner.username}}&user_id={{blog.owner.id}}">
                                 <span class="label label-default right">{{blog.owner.username}}</span>
-                                <!--WIP: add count to name to show how many posts user has-->
                                 <!--<p>Blog-id: { {blog.id}}</p>-->
                             </a>
                         {% endif %}
@@ -33,10 +34,14 @@
                         </form>
                     </div>
                 </div>
+                <!-- { % endif %} -->
             {% endfor %}
         {% else %}
             <p class="error">{{blog_error}}</p>
             <p class="error">No blogs yet</p>
+            <p>
+                <b class="error">{{username}} has not written any blogs yet.</b>
+            </p>
         {% endif %}
     </div>
 </div>

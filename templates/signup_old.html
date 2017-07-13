@@ -1,0 +1,47 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-xs-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h1>{{title}}</h1>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-12">
+
+                    <div class="form-group">
+                        <form>
+                            <label class="col-form-label">
+                                New User:
+                                <label class="col-form-label">Title:
+                                    <input class='form-control' type="text" name='User_title' value="{{User_title}}" />
+                                </label>
+                                <label class="col-form-label">Password:
+                                    <input class='form-control' type="text" name='User_Password' value="{{User_Password}}" />
+                                </label>
+                            </label>
+                            <input class='btn btn-primary' type="submit" value='Add User' />
+                        </form>
+                    </div>
+                    <strong class='error' value="{{User_Password_error}}">{{User_Password_error}}</strong>
+                    <strong class='error' value="{{User_title_error}}">{{User_title_error}}</strong>
+
+                    {% if users %}
+                        <div class=''>
+                            {% for user in userss %}
+                                <div class='panel panel-default'>
+                                    <div class='panel-body'>
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <b class="error">No users signed up yet</b>
+                    {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
