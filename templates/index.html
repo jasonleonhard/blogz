@@ -1,33 +1,19 @@
-{% extends 'base.html' %}
+{% extends 'template.html' %}
 {% block content %}
-<div class="col-xs-12">
-    {% if session %}
-        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+<div class="panel-body">
+    <strong class='error' value="{{password_error}}">{{password_error}}</strong>
+    <strong class='error' value="{{username_error}}">{{username_error}}</strong>
+    {% if users %}
+        {% for user in users %}
+        <div>
+            <a href="singleuser?username={{user.username}}&user_id={{user.id}}">
+                <span style='display:block;' class="label label-default">{{user.blogs.count()}} Blogs by: {{user.username}}</span>
+            </a>
+        </div>
+        <div class="pad"></div>
+        {% endfor %}
+    {% else %}
+        <b class="error">No users signed up yet</b>
     {% endif %}
-    <div class="panel panel-primary see_through01 mb0">
-        <div class="panel-heading">
-            <h1 class='mt0 mb0'>{{title}}</h1>
-            <p>If you don't have an account, you may <a href="/signup">Sign up</a> for one</p>
-        </div>
-    </div>
-    <div class="panel panel-primary mb0">
-        <div class="panel-body">
-            <p>
-                <b>{{directions}}</b>
-            </p>
-            <strong class='error' value="{{password_error}}">{{password_error}}</strong>
-            <strong class='error' value="{{username_error}}">{{username_error}}</strong>
-            {% if users %}
-                {% for user in users %}
-                    <a href="singleuser?username={{user.username}}&user_id={{user.id}}">
-                        <span class="label label-default">{{user.username}}</span>
-                        <!--<b> { { user.blogs}}</b>-->
-                    </a>
-                {% endfor %}
-            {% else %}
-                <b class="error">No users signed up yet</b>
-            {% endif %}
-        </div>
-    </div>
 </div>
 {% endblock  %}
