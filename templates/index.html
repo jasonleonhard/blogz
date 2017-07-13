@@ -4,11 +4,13 @@
     {% if session %}
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
     {% endif %}
-    <div class="panel panel-primary">
+    <div class="panel panel-primary see_through01 mb0">
         <div class="panel-heading">
             <h1 class='mt0 mb0'>{{title}}</h1>
             <p>If you don't have an account, you may <a href="/signup">Sign up</a> for one</p>
         </div>
+    </div>
+    <div class="panel panel-primary mb0">
         <div class="panel-body">
             <p>
                 <b>{{directions}}</b>
