@@ -1,0 +1,20 @@
+{% include 'base.html' %}
+<div class="col-lg-4"></div>
+<div class="col-lg-4">
+    {% include 'session_login_label.html' %}
+    <div class="panel panel-primary see_through01 mb3">
+        <div class="panel-heading">
+            <h1 class='mt0 mb0'>{{title}}</h1>
+        </div>
+        <div class='panel panel-default mb0'>
+            <div class='panel-body see_through2'>
+                {% block content %}
+                {% endblock %}
+
+                {% include 'signup_form.html' %}
+            </div>
+        </div>
+    </div>
+
+{% include 'see_through_panel.html' %}
+<div class="col-lg-4"></div>

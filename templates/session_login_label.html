@@ -1,0 +1,4 @@
+{% if session %}
+    <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+{% endif %}
+
