@@ -1,0 +1,22 @@
+<div class="panel panel-primary see_through01">
+    {% if users %} <!--{ % if users|length == 0 %}-->
+        {% for user in users %}
+            <div class='panel panel-default mb3'>
+                <div class='panel-body see_through2'>
+                    <!-- Can enable feature to only allow delete if its your post-->
+                    <!--{ % if user.username == session['username'] %}-->
+                        {% include 'delete_user_form.html' %}
+                        <!--{ % endif %}-->
+                    <a href="singleuser?username={{user.username}}&user_id={{user.id}}" class='left'>
+                        <span class="label label-default">{{user.username}}</span>
+                        <span class="label label-default">{{user.blogs.count()}}</span>
+                        <!-- <p>{{user.blogs}}</p> -->
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <b class="error">
+            No users signed up yet</b>
+    {% endif %}
+</div>

@@ -1,0 +1,14 @@
+<form action="/signup" method="POST">
+    <div class="col-form-label">
+        <span class="label label-default">Username:</span>
+        <input class='form-control' type="username" name='username' value="{{username}}">
+        <span class="label label-default">Password:</span>
+        <input class='form-control' type="password" name='password' value="{{password}}">
+        <span class="label label-default">Verify:</span>
+        <input class='form-control' type="password" name='verify' value="{{verify}}">
+    </div>
+    <div class='pad'></div>
+    <input class='btn btn-primary' type="submit" value='Create Account'>
+</form>
+<strong class='error' value="{{password_error}}">{{password_error}}</strong>
+<strong class='error' value="{{username_error}}">{{username_error}}</strong>
