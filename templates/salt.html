@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-xs-12">
+<div class="col-lg-4"></div>
+<div class="col-lg-4">
     {% if session %}
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
     {% endif %}
@@ -11,31 +12,30 @@
     </div>
     <div class="panel panel-primary mb0">
         <div class="panel-body">
-            <div class="col-xs-12">
-                <div class="form-group">
-                    <form action="/salt" method="POST">
-                        <span class="label label-default">Password:</span>
-                        <input class='form-control' type="password" name='password' value="{{password}}">
-                        <span class="label label-default">Hashed Password:</span>
-                        <input class='form-control' type="text" name='hashed_password' value="{{hashed_password}}">
-                        <div class="pad"></div>
-                        <input class='btn btn-primary' type="submit" value='Salt Password'>
-                    </form>
-                </div>
-                <strong class='error' value="{{password_error}}">{{password_error}}</strong>
-                {% if users %}
-                <!--{ % if users|length == 0 %}-->
-                    {% for user in users %}
-                        <div class='panel panel-default'>
-                            <div class='panel-body'>
-                                <p>{{user.password}}</p>
-                                <p>{{user.hashed_password}}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+            <div class="form-group">
+                <form action="/salt" method="POST">
+                    <span class="label label-default">Password:</span>
+                    <input class='form-control' type="password" name='password' value="{{password}}">
+                    <span class="label label-default">Hashed Password:</span>
+                    <input class='form-control' type="text" name='hashed_password' value="{{hashed_password}}">
+                    <div class="pad"></div>
+                    <input class='btn btn-primary' type="submit" value='Salt Password'>
+                </form>
             </div>
+            <strong class='error' value="{{password_error}}">{{password_error}}</strong>
+            {% if users %}
+            <!--{ % if users|length == 0 %}-->
+                {% for user in users %}
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                            <p>{{user.password}}</p>
+                            <p>{{user.hashed_password}}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
+<div class="col-lg-4"></div>
 {% endblock  %}
