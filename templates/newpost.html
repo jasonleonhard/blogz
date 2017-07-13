@@ -1,14 +1,8 @@
 {% extends 'template.html' %}
 {% block content %}
-<div class="col-lg-4"></div>
-<div class="col-lg-4">
-    <form action="/newpost" method="POST">
-        <div class="pad"></div>
-        {% include 'title_body_id.html' %}
-        <input class='btn btn-primary' type="submit" value='Add blog'>
-        <div class="pad"></div>
-    </form>
+<div class="col-xs-12">
+    {% include 'new_post_form.html' %}
     <strong class='error' value="{{blog_error}}">{{blog_error}}</strong>
+    <div class="pad"></div>
 </div>
-<div class="col-lg-4"></div>
 {% endblock  %}
