@@ -45,12 +45,13 @@ def userlist():
 
 @app.route('/randstr', methods=['POST', 'GET'])
 def randstr():
+    title = 'Random String'
     if request.method == 'GET':
-        return render_template('randstr.html', title='randstr')
+        return render_template('randstr.html', title=title)
     if request.method == 'POST':
         hashed_password = hashutils.make_salt()
         print(hashed_password)
-        return render_template('randstr.html', title='randstr', hashed_password=hashed_password)
+        return render_template('randstr.html', title=title, hashed_password=hashed_password)
 
 @app.route('/salt', methods=['POST', 'GET'])
 def salt():
@@ -128,11 +129,7 @@ def signup(users=''):
             if username == password:
                 username_error = "Username and password must be different"
                 return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
-            offensive_list = ['bitch', 'cunt', 'dick', 'whore', 'slut', 'republican', 'trump', 'cock', 'pussy', 'twat', 'tits',
-                            'porn', 'semen', 'ass', 'asshole', 'jizz', 'fuck', 'orgy', 'christ', 'death', 'shit', 'racist',
-                            'piss', 'vagina', 'penis', 'boner', 'murder', 'hostage', 'kidnap', 'sex', 'feces', 'poop', 'crap',
-                            'breast', 'genital', 'genitalia', 'scrotum', 'balls', 'ballsac', 'ballsack', 'clitoris', 'kkk', 'ku klux klan',
-                            'assault', 'torture', 'domestic violence', 'suicide', 'kill', 'killer', 'fart', 'bile', 'bad words' ]
+            offensive_list = offensive()
             for word in offensive_list:
                 if username == word or password == word:
                     username_error = "Please tone down that language."
@@ -160,6 +157,15 @@ def signup(users=''):
                 # username_error = "Duplicate user"
                 return render_template('signup.html', title='Sign up', users=users)
         return render_template('signup.html', title='Sign up', users=users)
+
+def offensive():
+    """Blacklist words for validations."""
+    offensive_list = ['bitch', 'cunt', 'dick', 'whore', 'slut', 'republican', 'trump', 'cock', 'pussy', 'twat', 'tits',
+                'porn', 'semen', 'ass', 'asshole', 'jizz', 'fuck', 'orgy', 'christ', 'death', 'shit', 'racist',
+                'piss', 'vagina', 'penis', 'boner', 'murder', 'hostage', 'kidnap', 'sex', 'feces', 'poop', 'crap',
+                'breast', 'genital', 'genitalia', 'scrotum', 'balls', 'ballsac', 'ballsack', 'clitoris', 'kkk', 'ku klux klan',
+                'assault', 'torture', 'domestic violence', 'suicide', 'kill', 'killer', 'fart', 'bile', 'bad words' ]
+    return offensive_list
 
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
@@ -192,7 +198,7 @@ def login():
                 session['id'] = user.id
                 db.session.commit()
                 flash("Logged in as: " + username)
-                # return render_template('newpost.html', title="New Post", user=user)
+                # return render_template('newpost.html', title=title, user=user)
                 return redirect('/newpost')
             else:
                 flash('User password incorrect, or user does not exist', 'error')
@@ -215,11 +221,11 @@ def newpost(blog_title='', blog_body='', blog_error=''):
         grab imputs
           title
           body
-    """
-    """Create new blog and validate. Does not list blogs."""
+    Create new blog and validate. Does not list blogs."""
+    title = "New Blog Post"
     if session:
         if request.method == 'GET':
-            return render_template('newpost.html', title="New Post")
+            return render_template('newpost.html', title=title)
         if request.method == 'POST':
             # users = query_all_users_lifo()
             blog_title = request.form['blog_title']
@@ -229,17 +235,7 @@ def newpost(blog_title='', blog_body='', blog_error=''):
             # blogs = Blog.query.filter_by(owner=owner).all()
             user_id = session['id']
             user = User.query.get(user_id)
-            # print()
-            # print()
-            # print(user)
-            # print(user.username)
-            # print(username)
-            # print(user.id)
-            # print(user_id)
-            # print()
-            # print()
-            # WIP: validate before creation
-            # 1. only allow unique blog names to be created
+
             existing_blog_title = Blog.query.filter_by(title=blog_title).first()
             existing_blog_body = Blog.query.filter_by(body=blog_body).first()
             # print(existing_blog_title)
@@ -247,17 +243,16 @@ def newpost(blog_title='', blog_body='', blog_error=''):
             if existing_blog_title or existing_blog_body:
                 blog_error = "Duplicate Blog."
                 return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
-            if len(blog_title) < 3 or len(blog_body) < 3:
-                blog_error = "title and body must be at least 3 characters."
+            if not len(blog_title) in range(3, 50): # if len(blog_title) < 3 or len(blog_title) > 50:
+                blog_error = "Title must be between 3 to 50 characters."
+                return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
+            if not len(blog_body) in range(3, 140): # if len(blog_body) < 3 or len(blog_body) > 140:
+                blog_error = "Body must be between 3 to 50 characters."
                 return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
             if blog_title == blog_body:
-                blog_error = "title and body must be different"
+                blog_error = "Title and body must be different"
                 return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
-            offensive_list = ['bitch', 'cunt', 'dick', 'whore', 'slut', 'republican', 'trump', 'cock', 'pussy', 'twat', 'tits',
-                            'porn', 'semen', 'ass', 'asshole', 'jizz', 'fuck', 'orgy', 'christ', 'death', 'shit', 'racist',
-                            'piss', 'vagina', 'penis', 'boner', 'murder', 'hostage', 'kidnap', 'sex', 'feces', 'poop', 'crap',
-                            'breast', 'genital', 'genitalia', 'scrotum', 'balls', 'ballsac', 'ballsack', 'clitoris', 'kkk', 'ku klux klan',
-                            'assault', 'torture', 'domestic violence', 'suicide', 'kill', 'killer', 'fart', 'bile', 'bad words' ]
+            offensive_list = offensive()
             for word in offensive_list:
                 if blog_title == word or blog_body == word:
                     blog_error = "Please tone down that language."
@@ -289,8 +284,8 @@ def myblogs(blog_title='', blog_body=''):
     """Only list my blogs."""
     if session:
         owner = User.query.filter_by(username=session['username']).first()
-        myblogs = Blog.query.filter_by(owner=owner).all()
-        return render_template('blog.html', title="My Blogs", myblogs=myblogs, blog_title=blog_title,
+        blogs = Blog.query.filter_by(owner=owner).all()
+        return render_template('blog.html', title="My Blogs", blogs=blogs, blog_title=blog_title,
                                 blog_body=blog_body, owner=owner)
     else:
         return redirect('/login')
@@ -332,7 +327,7 @@ def blogs(blogs='', owner='', blog_title='', blog_body='', blog_title_error='', 
     if blog_count:
         prev_blog_title = Blog.query.order_by('-id').first().title
         prev_blog_body = Blog.query.order_by('-id').first().body
-
+    # different blog titles and bodies
     if blogs_have_same_content(prev_blog_title, blog_title, prev_blog_body, blog_body):
         blog_title_error = 'Blogs must be different'
     # not blank
@@ -342,25 +337,54 @@ def blogs(blogs='', owner='', blog_title='', blog_body='', blog_title_error='', 
     if not blog_title_error or blog_body_error:
         create_new_blog(blog_title, blog_body, owner)
         blogs = query_all_blogs_lifo()
-
     # no errors on page or rerender page with errors
     return render_template('blogs.html', title="Blogs", blogs=blogs,
                            blog_title=blog_title, blog_body=blog_body,
                            blog_title_error=blog_title_error, blog_body_error=blog_body_error)
 
+# @app.route('/delete-user', methods=['GET', 'POST'])
+# def delete_user():
+#     """Delete user works. grabs hidden user id from form, queries by it and deletes with db commit."""
+#     # if request.method == 'POST':
+#     user_id = int(request.form['user-id'])
+#     user = User.query.get(user_id)
+#     db.session.delete(user)
+#     db.session.commit()
+#     if session:
+#         del session['id']
+#         del session['username']
+#         del session['password']
+#     return redirect('/signup')
+
 @app.route('/delete-user', methods=['GET', 'POST'])
 def delete_user():
-    """Delete user works. grabs hidden user id from form, queries by it and deletes with db commit."""
-    # if request.method == 'POST':
+    """This version hides user instead of removing from db.
+    grabs hidden user id from form, queries by it and 'deletes' by hiding."""
+    # # if request.method == 'POST':
+    # user_id = int(request.form['user-id'])
+    # user = User.query.get(user_id)
+
+    # db.session.delete(user)
+    # db.session.commit()
+    # if session:
+    #     del session['id']
+    #     del session['username']
+    #     del session['password']
+    # return redirect('/signup')
+
     user_id = int(request.form['user-id'])
-    user = User.query.get(user_id)
-    db.session.delete(user)
+    # user_id = request.form['crossed-off-User']
+    hide_user = User.query.get(user_id)
+
+    if not hide_user:
+        return redirect("/?error=Attempt to watch a User unknown to this database")
+
+    # if we didn't redirect by now, then all is well
+    hide_user.hidden = True
+    db.session.add(hide_user)
     db.session.commit()
-    if session:
-        del session['id']
-        del session['username']
-        del session['password']
-    return redirect('/signup')
+    return render_template('signup.html', hide_user=hide_user)
+
 
 def deleting_blog():
     """Delete a blog by blog-id we use request parameters and session."""
@@ -420,9 +444,37 @@ def home():
     """Loop users and create urls that send a user to a particular users blog posts.
     As per the clients request we render a list of user links.
     Could become a splash screen or signin."""
-
     users = query_all_users_lifo()
-    return render_template('index.html', title='Greetings', directions='Links provided below.', users=users)
+    # WIP: add blog count
+    # for user in users:
+
+    users_names = []
+    for user in users:
+        users_names.append(user.username)
+    # print(users_names)
+    # print()
+    # count1 = 0
+    # count2 = 0
+    # count3 = 0
+    # blogs = query_all_blogs_lifo()
+    # for blog in blogs():
+    #     if blog.owner == 'Robot':
+    #         count1 += 1
+    #     if blog.owner == 'Kitten':
+    #         count2 += 1
+    #     if blog.owner == 'Dingo':
+    #         count3 += 1
+    # print()
+    # print(users)
+    # print()
+    # print(blogs)
+    # print()
+
+    # for blog in blogs:
+    #     if blog
+    #     if len(blog.) == 0:
+
+    return render_template('index.html', title='Greetings', directions='Click name to view users blogs', users=users)
 
 @app.route("/singleuser", methods=['POST', 'GET'])
 def singleuser():
@@ -432,10 +484,21 @@ def singleuser():
     username = request.args.get('username')
     owner = User.query.filter_by(username=username).first()
     owner_id = owner.id
-    print('user_id: ' + user_id)              # 8
-    print('username: ' + username)            # abb
-    print('str(owner_id): ' + str(owner_id))  # 8
-    return render_template('singleUser.html', title="This Users Blogs", blogs=blogs, users=users, user_id=user_id, username=username, owner=owner, owner_id=owner_id)
+    title = owner.username + "'s Blogs"
+
+    blogs = Blog.query.filter_by(owner=owner).all()
+    n_blogs = len(blogs)
+    print()
+    print('user_id: ' + user_id)              # 2
+    print('username: ' + username)            # Robot
+    print('str(owner_id): ' + str(owner_id))  # 2
+    print('str(n_blogs): ' + str(n_blogs))    # 0
+    print()
+    return render_template('singleUser.html', title=title, blogs=blogs, users=users, user_id=user_id, username=username, owner=owner, owner_id=owner_id, n_blogs=n_blogs)
+
+@app.route("/duck", methods=['POST', 'GET'])
+def duck():
+    return render_template('duck.html', title="Duck Search: quack quack")
 
 # disable browser caching
 @app.after_request
