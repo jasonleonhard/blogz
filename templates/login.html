@@ -1,7 +1,6 @@
 {% extends 'template.html' %}
 {% block content %}
-<div class="col-lg-4"></div>
-<div class="col-lg-4">
+<div class="col-xs-12">
     <form action="/login" method="POST">
         <div class="pad"></div>
         {% include 'username_password.html' %}
@@ -11,5 +10,4 @@
     <strong class='error' value="{{password_error}}">{{password_error}}</strong>
     <strong class='error' value="{{username_error}}">{{username_error}}</strong>
 </div>
-<div class="col-lg-4"></div>
 {% endblock  %}
