@@ -1,0 +1,23 @@
+{% include 'base.html' %}
+<div class="col-lg-4"></div>
+<div class="col-lg-4">
+    {% if session %}
+        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+    {% endif %}
+    <div class="panel panel-primary see_through01">
+        <div class="panel-heading">
+            <h1 class='mt0 mb0'>{{title}}</h1>
+            {% if not session %}
+                <p>If you don't have an account <a href="/signup">Sign up</a> for one</p>
+            {% endif %}
+        </div>
+        <div class='panel panel-default mb3'>
+            <div class='panel-body see_through2 p0'>
+                {% block content %}
+                {% endblock %}
+                <strong class='error' value="{{error}}">{{error}}</strong>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-4"></div>
