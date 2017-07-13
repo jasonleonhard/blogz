@@ -5,41 +5,52 @@
     {% if session %}
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
     {% endif %}
-    <div class="panel panel-primary">
+    <div class="panel panel-primary see_through01 mb0">
         <div class="panel-heading">
             <h1 class='mt0 mb0'>{{title}}</h1>
-            <p>If you don't have an account, you may <a href="/signup">Sign up</a> for one</p>
+            <p>If you don't have an account <a href="/signup">Sign up</a> for one</p>
         </div>
-        <div class="panel-body">
-            <div class="col-xs-12">
-                <strong class='error' value="{{password_error}}">{{password_error}}</strong>
-                <strong class='error' value="{{username_error}}">{{username_error}}</strong>
-
-                <div class="col-xs-8">
-                    {% if users %}
-                        <div class="col-xs-4">
-                            <div><b>name</b></div>
-                            {% for user in users %}
-                            <div>
-                                <!--linkable user tag-->
-                                <a href="/singleuser?username={{user.username}}&user_id={{user.id}}">
-                                    <span class="label label-default">{{user.username}}</span>
-                                </a>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="col-xs-4">
-                            <div><b>pw</b></div>
-                            {% for user in users %}
-                                <div>{{user.password}}</div>
-                                <div>{{user.pw_hash}}</div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <b class="error">No users signed up yet</b>
-                    {% endif %}
+    </div>
+    <div class='panel panel-default mb1'>
+        <div class='panel-body'>
+        <strong class='error' value="{{password_error}}">{{password_error}}</strong>
+        <strong class='error' value="{{username_error}}">{{username_error}}</strong>
+        <div class="col-xs-8">
+            {% if users %}
+                <div class="col-xs-3">
+                    <div><b>name</b></div>
+                    {% for user in users %}
+                    <div>
+                        <!--linkable user tag-->
+                        <a href="/singleuser?username={{user.username}}&user_id={{user.id}}">
+                            <span class="label label-default">{{user.username}}</span>
+                        </a>
+                    </div>
+                    {% endfor %}
                 </div>
-            </div>
+                <div class="col-xs-3">
+                     <div><b>pw id</b></div>
+                    {% for user in users %}
+                        <div>{{user.id}}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-xs-3">
+                     <div><b>pw</b></div>
+                    {% for user in users %}
+                        <div>{{user.password}}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-xs-3">
+                     <div><b>hashed</b></div>
+                    {% for user in users %}
+                        <div>{{user.pw_hash}}</div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <b class="error">No users signed up yet</b>
+            {% endif %}
+        </div>
+    </div>
         </div>
     </div>
 </div>
