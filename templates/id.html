@@ -1,31 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-xs-12">
-    <div class="panel panel-primary">
+<div class="col-lg-4"></div>
+<div class="col-lg-4">
+    {% if session %}
+        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+    {% endif %}
+    <div class="panel panel-primary see_through01 mb0">
         <div class="panel-heading">
-            <h1>{{title}}</h1>
+            <h1 class='mt0 mb0'>{{title}}</h1>
         </div>
+    </div>
+    <div class="panel panel-primary mb0">
         <div class="panel-body">
-            <div class="col-xs-12">
-               <form class="form-horizontal">
-                    <form></form>
-                    <div class='panel panel-default'>
-                        <div class='panel-body'>
-                            <form method="POST" action="/delete_blog3" class='left'>
-                                <!--<input type="hidden" name="blog-id" value="{ { blog.id}}"/>-->
-                                <input type="hidden" name="blog-id" value="{{id}}"/>
-                                <input type="submit" value="Done" class="btn btn-primary"/>
-                            </form>
-                            <div class="left pad_left">
-                                <!--<b>{{id}}</b>-->
-                                <h3 class='no_top_margin'>{{blog_title}}</h3>
-                                <p>{{blog_body}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+            <form method="POST" action="/delete_blog3" class='left'>
+                <input type="hidden" name="blog-id" value="{{id}}"/>
+            </form>
+            <div class="left">
+                <h3 class='no_top_margin wrap'>{{blog_title}}</h3>
+                <p class='wrap'>{{blog_body}}</p>
+                <input type="submit" value="Delete" class="btn btn-primary btn-xs"/>
+                <a href="/singleuser?username={{blog_owner}}&user_id={{blog_id}}">
+                    <span class="label label-default right">{{blog_owner}}</span>
+                </a>
             </div>
         </div>
     </div>
 </div>
+<div class="col-lg-4"></div>
 {% endblock  %}
