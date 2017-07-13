@@ -1,28 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'template.html' %}
 {% block content %}
-<div class="col-lg-4"></div>
-<div class="col-lg-4">
-    {% if session %}
-        <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
-    {% endif %}
-    <div class="panel panel-primary see_through01 mb0">
-        <div class="panel-heading">
-            <h1 class='mt0 mb0'>{{title}}</h1>
-        </div>
+<div class="panel-body">
+    <div class="form-group">
+        <form action="/randstr" method="POST">
+            <span class="label label-default">Hashed Password:</span>
+            <input class='form-control' type="text" name='hashed_password' value="{{hashed_password}}">
+            <div class="pad"></div>
+            <div class="pad"></div>
+            <input class='btn btn-primary' type="submit" value='Random String'>
+        </form>
     </div>
-    <div class="panel panel-primary mb0">
-        <div class="panel-body">
-            <div class="form-group">
-                <form action="/randstr" method="POST">
-                    <span class="label label-default">Hashed Password:</span>
-                    <input class='form-control' type="text" name='hashed_password' value="{{hashed_password}}">
-                    <div class="pad"></div>
-                    <input class='btn btn-primary' type="submit" value='Random String'>
-                </form>
-            </div>
-            <strong class='error' value="{{password_error}}">{{password_error}}</strong>
-        </div>
-    </div>
+    <strong class='error' value="{{password_error}}">{{password_error}}</strong>
 </div>
-<div class="col-lg-4"></div>
 {% endblock  %}

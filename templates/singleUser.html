@@ -22,26 +22,16 @@
                         </a>
                         <p class='wrap'>{{blog.body}}</p>
                         {% if blog.owner.username %}
-                            <!--linkable user tag-->
-                            <a href="/singleuser?username={{blog.owner.username}}&user_id={{blog.owner.id}}">
-                                <span class="label label-default right">{{blog.owner.username}}</span>
-                                <!--<p>Blog-id: { {blog.id}}</p>-->
-                            </a>
+                            {% include 'blog_owner_link.html' %}
                         {% endif %}
-                        <form method="POST" action="/delete_blog" class='left'>
-                            <input type="hidden" name="blog-id" value="{{blog.id}}">
-                            <input type="submit" value="Delete" class="btn btn-primary btn-xs">
-                        </form>
+
+                        {% include 'delete_blog_form.html' %}
                     </div>
                 </div>
                 <!-- { % endif %} -->
-        {% endfor %}
+          {% endfor %}
     {% else %}
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h1 class='mt0 mb0'>{{title}}</h1>
-            </div>
-        </div>
+        {% include 'panel_primary_title.html' %}
         <p class="error">{{blog_error}}</p>
         <b class="alert alert-info">{{username}} has not written any blogs yet.</b>
     {% endif %}

@@ -9,62 +9,40 @@
         <div class="panel-heading">
             <h1 class='mt0 mb0'>{{title}}</h1>
         </div>
-
-        <div class="panel panel-primary mb0">
+        <div class="panel panel-primary mb3">
             <div class="panel-body">
                 <div class="form-group">
-                    <form action="/newpost" method="POST">
-                            <label class="mb0">
-                                <span class="label label-default">Title</span>
-                            </label>
-                            <input class='form-control' type="text" name='blog_title' value={{blog_title}}>
-
-                            <label class="mb0">
-                                <span class="label label-default">Body</span>
-                            </label>
-                            <textarea class='form-control' type="text" name='blog_body' value={{blog_body}}>{{blog_body}}</textarea>
-                            <input type="hidden" name='blog_body' value={{id}}>
-                        <div class="pad"></div>
-                        <input class='btn btn-primary' type="submit" value='Add blog'>
-                    </form>
+                    {% include 'new_post_form.html' %}
                 </div>
-                <strong class='error' value="{{blog_body_error}}">{{blog_body_error}}</strong>
-                <strong class='error' value="{{blog_title_error}}">{{blog_title_error}}</strong>
             </div>
         </div>
-
-    <div class="panel panel-primary see_through01">
-        {% if blogs %}
-            {% for blog in blogs %}
-                <div class='panel panel-default mb1'>
-                    <div class='panel-body'>
-                        <div class="">
-                            <a href="{{ url_for('blog', id=blog.id, blog_title=blog.title, blog_body=blog.body) }}">
-                                <h4 class='no_top_margin'>
-                                    <p class='wrap'>{{blog.title}}</p>
-                                </h4>
-                            </a>
-                            <p class='wrap'>{{blog.body}}</p>
-                            {% if blog.owner.username %}
-                                <span class="label label-default right">{{blog.owner.username}}</span>
-                                <!--<p>Owner-id:        { {blog.owner.id}}</p>-->
-                                <!--<p>Blog-id:         { { blog.id}}</p>-->
-                            {% endif %}
-                        <form method="POST" action="/delete_blog" class='left'>
-                            <input type="hidden" name="blog-id" value="{{blog.id}}">
-                            <input type="submit" value="Delete" class="btn btn-primary btn-xs">
-                        </form>
-
+        <div class="panel panel-primary see_through01">
+            {% if blogs %}
+                {% for blog in blogs %}
+                    <div class='panel panel-default mb3'>
+                        <div class='panel-body'>
+                            <div class="">
+                                <a href="{{ url_for('blog', id=blog.id, blog_title=blog.title, blog_body=blog.body) }}">
+                                    <h4 class='no_top_margin'>
+                                        <p class='wrap'>{{blog.title}}</p>
+                                    </h4>
+                                </a>
+                                <p class='wrap'>{{blog.body}}</p>
+                                {% if blog.owner.username %}
+                                    <span class="label label-default right">{{blog.owner.username}}</span>
+                                    <!--<p>Owner-id:        { {blog.owner.id}}</p>-->
+                                    <!--<p>Blog-id:         { { blog.id}}</p>-->
+                                {% endif %}
+                                {% include 'delete_blog_form.html' %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="error">{{blog_error}}</p>
-            <p class="error">No blogs yet</p>
-        {% endif %}
-
+                {% endfor %}
+            {% else %}
+                <p class="error">{{blog_error}}</p>
+                <p class="error">No blogs yet</p>
+            {% endif %}
+        </div>
     </div>
-</div>
 <div class="col-lg-4"></div>
 {% endblock  %}

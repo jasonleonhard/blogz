@@ -8,10 +8,7 @@
                     {% include 'blog_title_url.html' %}
                     <p class='wrap'>{{blog.body}}</p>
                     {% if blog.owner.username %}
-
                         {% include 'blog_owner_link.html' %}
-
-
                         <!--<p>Owner-id:        { {blog.owner.id}}</p>-->
                         <!--<p>Blog-id:         { { blog.id}}</p>-->
                     {% endif %}
