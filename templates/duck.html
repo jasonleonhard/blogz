@@ -5,18 +5,21 @@
     {% if session %}
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
     {% endif %}
-    <div class="panel panel-primary mb0">
-        <div class="panel-heading pad_left">
+    <div class="panel panel-primary see_through01 mb0">
+        <div class="panel-heading">
             <h1 class='mt0 mb0'>{{title}}</h1>
         </div>
+    </div>
+    <div class="panel panel-primary mb0">
         <div class="panel-body no_pad_bottom">
-            <div class="form-group">
-                <form action="https://duckduckgo.com" method="get">
-                    <label for="first no_bottom_margin" style="margin-bottom: 0;"><span class="label label-default">Search Online</span></label>
-                    <input type="text" name="q" id="first" class='form-control'>
-                    <div class="pad"></div>
-                    <input type="submit" class='btn btn-primary' value='Search'>
-                </form>
+                <div class="form-group">
+                    <form action="https://duckduckgo.com" method="get">
+                        <label for="first no_bottom_margin" style="margin-bottom: 0;"><span class="label label-default">Search Online</span></label>
+                        <input type="text" name="q" id="first" class='form-control'>
+                        <div class="pad"></div>
+                        <input type="submit" class='btn btn-primary' value='Search'>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
