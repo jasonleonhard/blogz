@@ -274,8 +274,9 @@ def newpost(blog_title='', blog_body='', blog_error=''):
                 # return render_template('blog.html', title="Blog", blogs=blogs,
                 #                         blog_title=blog_title, blog_body=blog_body, owner=owner)
 
+                title = blog.owner.username + "'s New Blog Post"
                 # instead of listing all blogs the client wishes we show just the newly created blog
-                return render_template('singlePost.html', title="New Blog Post", blog=blog)
+                return render_template('singlePost.html', title=title, blog=blog)
     else:
         return redirect('/login')
 
