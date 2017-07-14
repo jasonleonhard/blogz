@@ -54,8 +54,7 @@ ul { list-style: none; }
 .pl1 { padding-left: 1%; }
 .pr1 { padding-right: 1%; }
 
-
-
+.b0 { border-width: 0px !important; }
 
 .p1 { padding: 1%; }
 
@@ -86,11 +85,22 @@ td, th, tbody { border: none !important; }
     display: block;
  }
 
-.see_through3 { background: rgba(255, 255, 255, 0.0) !important; }
-.see_through { background: rgba(255, 255, 255, 0.6) !important; }
-.see_through2 { background: rgba(255, 255, 255, 0.1) !important; }
+.see_through {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border-width: 0px !important;
+}
 
-p5 { padding: 5px !important; }
+.see_through2 {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-width: 0px !important;
+}
+
+.see_through3 {
+    background: rgba(255, 255, 255, 0.0) !important;
+    border-width: 0px !important;
+}
+
+.p5 { padding: 5px !important; }
 
 .wrap {
     word-wrap: break-word;
