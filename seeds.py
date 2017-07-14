@@ -49,7 +49,6 @@ db.session.add(blog4)
 blog5 = Blog('Bucket of bolts, hey who you calling bucket of bolts?!?', 'How I managed to replace half the worlds jobs in under a century: Bleep Blop Bloop How I managed to replace half the worlds jobs in under a century: Bleep Blop Bloop', user2)
 db.session.add(blog5)
 
-
 db.session.commit()
 # exit()
 ###########################################################################
