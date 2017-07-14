@@ -37,23 +37,6 @@
     </div>
     {% block content %}
     {% endblock  %}
-    <footer class='footer navbar-fixed-bottom pad-bottom text-center'>
-        <div class="col-md-12">
-            <a href="/"><span class="label label-default">home</span></a>
-            <a href="/signup"><span class="label label-default">signup</span></a>
-            <a href="/login"><span class="label label-default">login</span></a>
-            <a href="/logout"><span class="label label-default">logout</span></a>
-            <a href="/userlist"><span class="label label-default">userlist</span></a>
-            <a href="/session"><span class="label label-default">session</span></a>
-            <a href="/newpost"><span class="label label-default">newpost</span></a>
-            <a href="/blog"><span class="label label-default">blog</span></a>
-            <a href="/blogs"><span class="label label-default">blogs</span></a>
-            <a href="/myblogs"><span class="label label-default">myblogs</span></a>
-            <a href="/randstr"><span class="label label-default">randstr</span></a>
-            <a href="/salt"><span class="label label-default">salt</span></a>
-            <a href="/"><span class="label label-default">singleuser</span></a>
-            <a href="/duck"><span class="label label-default">duck</span></a>
-        </div>
-    </footer>
+    {% include 'footer.html' %}
 </body>
 </html>
