@@ -1,5 +1,13 @@
 a:hover { text-decoration: none; }
-body { background-color: rgba(0, 100, 255, 0.9) }
+body {
+    background-color: rgba(0, 100, 255, 1);
+    color: white;
+}
+.modal-content {
+    background-color: rgba(0, 100, 255, 1);
+    color: white;
+}
+
 ul { list-style: none; }
 
 /* overriding background color of heading */
@@ -66,6 +74,8 @@ ul { list-style: none; }
 .pad_left { padding-left: 20px; }
 .pad-bottom { padding-bottom: 5px; }
 
+.p5 { padding: 5px !important; }
+
 .left { float: left; }
 .right { float: right; }
 
@@ -100,8 +110,6 @@ td, th, tbody { border: none !important; }
     border-width: 0px !important;
 }
 
-.p5 { padding: 5px !important; }
-
 .wrap {
     word-wrap: break-word;
     word-break: break-all;
@@ -124,7 +132,9 @@ td, th, tbody { border: none !important; }
     }
     /* Modal Content/Box */
     .modal-content {
-        background-color: rgba(0, 155, 255, 1);
+         background-color: rgba(0, 155, 255, 1);
+        /* background-color: rgba(255, 255, 255, 1); */
+        /* background-color: gray; */
         margin: 15% auto; /* 15% from the top and centered */
         padding: 20px;
         border: 1px solid #888;
@@ -143,3 +153,32 @@ td, th, tbody { border: none !important; }
         text-decoration: none;
         cursor: pointer;
     }
+
+/* slider styling  did not work for unknown reasons */
+/* .slider {
+    color: 'white' !important;
+} */
+
+/* distance between ranges */
+input[type="range"] {
+    height: 40px;
+    /* -webkit-appearance: none; */
+    /* background-color: black; */
+}
+
+/* knob styling */
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	position: relative;
+	top: 0px;
+	z-index: 1;
+	width: 11px;
+	height: 11px;
+	cursor: pointer;
+	-webkit-box-shadow: 0px 6px 5px 0px rgba(0,0,0,0.6);
+	-moz-box-shadow: 0px 6px 5px 0px rgba(0,0,0,0.6);
+	box-shadow: 0px 6px 5px 0px rgba(0,0,0,0.6);
+	-webkit-border-radius: 40px;
+	-moz-border-radius: 40px;
+	border-radius: 40px;
+}

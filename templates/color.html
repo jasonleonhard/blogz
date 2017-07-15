@@ -3,61 +3,64 @@
 {% block content %}
 <div class="panel panel-primary see_through10 no_padding">
     <div class="panel-heading pad_left see_through2">
-        <h1>Colors</h1>
+        <h1 id='title' onclick="toggleColors(this);">{{title}}</h1>
     </div>
     <div class="panel-body">
         <div class="col-xs-12">
-            <div class="col-xs-12">
-                <label for="R_range" class="see_through10">R</label>
-                <input for="R_range" type="number" id="R_number" min="0" value="0" max="255" step="1" oninput="updateR(value)" onchange="changeColor()">
-                <input type="range" min="0" max="255" value="0" id="R_range" step="1" oninput="updateR(value)" onchange="changeColor()" for="R_number" class="width" list="RGBticks">
+            <div id='R' class="col-xs-12">
+                <label id='R_label' for="R_range" class="see_through10 btn btn-info btn-xs" onclick="toggleColors(this);">R</label>
+                <input id="R_number" for="R_range" type="number" min="0" value="0" max="255" step="1" oninput="updateR(value)" onchange="changeColor()">
+                <input id="R_range" type="range" min="0" max="255" value="0" step="1" oninput="updateR(value)" onchange="changeColor();" for="R_number" class="slider bar rangeinput" list="RGBticks" style='color:white'>
+                <span class="highlight"></span>
             </div>
-            <div class="col-xs-12">
-                <label for="G_range" class="see_through10">G</label>
-                <input for="G_range" type="number" id="G_number" min="0" value="100" max="255" step="1" oninput="updateG(value)" onchange="changeColor()">
-                <input type="range" min="0" max="255" value="100" id="G_range" step="1" oninput="updateG(value)" onchange="changeColor()" for="G_number" class="width" list="RGBticks">
+            <div id='G' class="col-xs-12">
+                <label id='G_label' for="G_range" class="see_through10 btn btn-info btn-xs" onclick="toggleColors(this);">G</label>
+                <input id="G_number" for="G_range" type="number" min="0" value="100" max="255" step="1" oninput="updateG(value)" onchange="changeColor()">
+                <input id="G_range" type="range" min="0" max="255" value="100" step="1" oninput="updateG(value)" onchange="changeColor();" for="G_number" class="slider bar rangeinput" list="RGBticks" style='color:white'>
+                <span class="highlight"></span>
             </div>
-            <div class="col-xs-12">
-                <label for="B_range" class="see_through10">B</label>
-                <input for="B_range" type="number" id="B_number" min="0" value="255" max="255" step="1" oninput="updateB(value)" onchange="changeColor()">
-                <input type="range" min="0" max="255" value="255" id="B_range" step="1" oninput="updateB(value)" onchange="changeColor()" for="B_number" class="width" list="RGBticks">
+            <div id='B' class="col-xs-12">
+                <label id='B_label' for="B_range" class="see_through10 btn btn-info btn-xs" onclick="toggleColors(this);">B</label>
+                <input id="B_number" for="B_range" type="number" min="0" value="255" max="255" step="1" oninput="updateB(value)" onchange="changeColor()">
+                <input id="B_range" type="range" min="0" max="255" value="255" step="1" oninput="updateB(value)" onchange="changeColor();" for="B_number" class="slider bar rangeinput" list="RGBticks" style='color:white'>
+                <span class="highlight"></span>
             </div>
-            <div class="col-xs-12">
-                <label for="A_range" class="see_through10">A</label>
-                <input for="A_range" type="number" id="A_number" min="0" value="0.9" max="1" step=".01" oninput="updateA(value)" onchange="changeColor()">
-                <input type="range" min="0" max="1" value="0.9" id="A_range" step=".01" oninput="updateA(value)" onchange="changeColor()" for="A_number" class="width" list="Aticks">
+            <div id='A' class="col-xs-12">
+                <label id='A_label' for="A_range" class="see_through10 btn btn-info btn-xs" onclick="toggleColors(this);">A</label>
+                <input id="A_number" for="A_range" type="number"  min="0" value="1.00" max="1" step=".01" oninput="updateA(value)" onchange="changeColor()">
+                <input id="A_range" type="range" min="0" max="1" value="1" step=".01" oninput="updateA(value)" onchange="changeColor();" for="A_number" class="slider bar rangeinput" list="Aticks" style='color:white'>
+                <span class="highlight"></span>
             </div>
         </div>
 
         <div class="col-xs-12">
             <div class="col-xs-4">
-                <b id="rgba" class='see_through10'>rgba(0, 0, 0, 1)</b>
+                <h5><b id="rgba_btn" class='see_through10 btn-xl btn-info' onclick="toggleColors(this);">rgba(0, 0, 0, 1)</b></h5>
             </div>
             <div class="col-xs-4">
-                <b id="rgb" class="see_through10"></b>
+                <h5><b id="rgba_pos" class="see_through10 btn-xl btn-info" onclick="toggleColors(this);"></b></h5>
             </div>
             <div class="col-xs-4">
-                <b id="position" class="see_through10"></b>
+                <h5><b id="position" class="see_through10 btn-xl btn-info" onclick="toggleColors(this);"></b></h5>
             </div>
             <div class="col-xs-4">
-                <div id="color_name"></div>
+                <h5><div id="color_name" onclick="toggleColors(this);"></div></h5>
             </div>
         </div>
 
         <div class="col-xs-12">
         <div class="pad"></div>
             <div class="col-xs-12">
+                <input type="hidden" value='Jason Leonhard'>
                 <!--<input type="button" id="help_btn" class="btn btn-xl btn-primary right" value="HELP" onclick="help(this);">-->
-                <input type="button" id="technicolor_btn" class="btn btn-xl btn-info see_through technicolor right" value="OFF" onclick="toggleTechnicolor(this);">
+                <input type="button" id="technicolor_btn" class="btn btn-xl btn-info see_through10 technicolor right" value="OFF" onclick="toggleTechnicolor(this);">
                 <!--modal html-->
                 <!-- Trigger/Open The Modal -->
-                <button id="myBtn" class="btn btn-info see_through">HELP</button>
+                <button id="myBtn" class="btn btn-info see_through10">HELP</button>
             </div>
         </div>
-
     </div>
 </div>
-
 
 <datalist id="RGBticks">
     <option>0</option>
@@ -136,22 +139,22 @@
         <h3>Use either sliders or input boxes to change color.</h3>
         <h4>Here are some common colors you might want to know:</h4>
         <ul>
-            <li>black	rgb(0, 0, 0, 1)</li>
-            <li>navy	rgb(0, 0, 128, 1)</li>
-            <li>blue	rgb(0, 0, 255, 1)</li>
-            <li>green	rgb(0, 128, 0, 1)</li>
-            <li>teal	rgb(0, 128, 128, 1)</li>
-            <li>lime	rgb(0, 255, 0, 1)</li>
-            <li>aqua	rgb(0, 255, 255, 1)</li>
-            <li>maroon	rgb(128, 0, 0, 1)</li>
-            <li>purple	rgb(128, 0, 128, 1)</li>
-            <li>olive	rgb(128, 128, 0, 1)</li>
-            <li>gray	rgb(128, 128, 128, 1)</li>
-            <li>silver	rgb(192, 192, 192, 1)</li>
-            <li>red	    rgb(255, 0, 0, 1)</li>
-            <li>fuchsia	rgb(255, 0, 255, 1)</li>
-            <li>yellow	rgb(255, 255, 0, 1)</li>
-            <li>white	rgb(255, 255, 255, 1)</li>
+            <li>black	rgba(0, 0, 0, 1)</li>
+            <li>navy	rgba(0, 0, 128, 1)</li>
+            <li>blue	rgba(0, 0, 255, 1)</li>
+            <li>green	rgba(0, 128, 0, 1)</li>
+            <li>teal	rgba(0, 128, 128, 1)</li>
+            <li>lime	rgba(0, 255, 0, 1)</li>
+            <li>aqua	rgba(0, 255, 255, 1)</li>
+            <li>maroon	rgba(128, 0, 0, 1)</li>
+            <li>purple	rgba(128, 0, 128, 1)</li>
+            <li>olive	rgba(128, 128, 0, 1)</li>
+            <li>gray	rgba(128, 128, 128, 1)</li>
+            <li>silver	rgba(192, 192, 192, 1)</li>
+            <li>red	    rgba(255, 0, 0, 1)</li>
+            <li>fuchsia	rgba(255, 0, 255, 1)</li>
+            <li>yellow	rgba(255, 255, 0, 1)</li>
+            <li>white	rgba(255, 255, 255, 1)</li>
         </ul>
         <h5>Lowering the A opacity value will produce a pastel color</h5>
         <h5>And if the background color of a website is not white it will mix the colors</h5>
@@ -160,8 +163,7 @@
 </div>
 
 <script>
-// I externalized some of the scripts yet found others to not work well outside this page
-// modal_section
+// modal_section // I externalized some of the scripts yet found others to not work well outside this page
     // Get the modal
     var modal = document.getElementById('myModal');
 
@@ -202,8 +204,8 @@ function toggleTechnicolor(state) {
 
 function technicolor_off(state){
     if (state=="OFF") {
-        $('body').css('background', 'aqua');
-        $('a').css('background', 'auqa');
+        $('body').css('background', 'rgba(0, 100, 255, 1')
+        $('a').css('background', 'rgba(0, 100, 255, 1')
     }
 }
 
@@ -215,25 +217,26 @@ $("body").mousemove(function(e) {
     // only track position when button is on
     if (state == "ON") {
         var position = document.getElementById("position").innerHTML = 'x=' + x + ', y=' + y;
-        // only fire while state is ON and less often with modulus
-        // if (x % 1 == 0 | y % 1 == 0) {
-            var a = x % 255;
-            var b = y % 255;
-            var c = 255;
-            var d = 1;
-            var current_color = "rgba(" + a + ", " + b + ", " + c + ", " + d + ")"
-            // only using jQuery for a few things
-            $('body').css('background', current_color);
-            // $('a').css('color', current_color);
-            $("#rgb").text(current_color);
-        // }
-    // }
+        var text_color = 'black'
+        var a = x % 255;
+        var b = y % 255;
+        var c = 255;
+        var d = 1;
+        var current_color = "rgba(" + a + ", " + b + ", " + c + ", " + d + ")"
+        var current_color_modal = "rgba(" + a + ", " + b + ", " + c +  ", 1 )";
+
+        // only using jQuery for a few things
+        $('body').css('background', current_color);
+        $('#rgba_pos').css('background', current_color);
+        $('#rgba_btn').css('background', current_color);
+        $('.modal-content').css('background', current_color_modal);
+        $("#rgba_pos").text(current_color);
     } else {
-        document.getElementById("rgb").innerHTML = '';
+        document.getElementById("rgba_pos").innerHTML = '';
         document.getElementById("position").innerHTML = '';
+        $('.modal-content').css('background', 'rgba(0, 100, 255, 1');
     }
 })
-
 // adds tick marks to slidebar automagically,
 // unfortunatly for us we want different ranges for our tick marks
 // the first 3 ranges should be 0-255 by 5 steps
@@ -255,7 +258,6 @@ $("body").mousemove(function(e) {
     // arr = Array.prototype.slice.call(lists);
     // arr.forEach(ticks);
 
-
 // used originally to create a count used for tick marks
     // function counting() {
     //     var arr = [];
@@ -268,5 +270,6 @@ $("body").mousemove(function(e) {
     // }
     // var arr = counting()
     // console.log(arr)
+
 </script>
 {% endblock  %}
