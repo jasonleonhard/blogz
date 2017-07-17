@@ -7,6 +7,12 @@ from lib import *
 import hashutils
 # from hashutils import check_pw_hash
 
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'signup', 'static']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
+
 @app.route('/session', methods=['POST', 'GET'])
 def current_session():
     """ALl of the logic here can be tested and or ttd
@@ -321,8 +327,8 @@ def blogs(blogs='', owner='', blog_title='', blog_body='', blog_title_error='', 
         blog_title = get_title()
         blog_body = get_body()
     else: # Avoid validation first time template is rendered
-        return render_template('blogs.html', title="Blogs", blogs=blogs,
-                               blog_title=blog_title, blog_body=blog_body)
+        return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
+
     # Validation Section # make sure that
     # last blog is not the same as next blog
     blog_count = Blog.query.count()
@@ -386,7 +392,6 @@ def delete_user():
     db.session.add(hide_user)
     db.session.commit()
     return render_template('signup.html', hide_user=hide_user)
-
 
 def deleting_blog():
     """Delete a blog by blog-id we use request parameters and session."""
@@ -501,6 +506,28 @@ def singleuser():
 @app.route("/duck", methods=['POST', 'GET'])
 def duck():
     return render_template('duck.html', title="Duck Search: quack quack")
+
+@app.route("/user_dot_blogs", methods=['POST', 'GET'])
+def user_dot_blogs():
+    users = query_all_users_lifo()
+    blogs = Blog.query.all()
+    return render_template('user_dot_blogs.html', title="User.blogs", users=users, blogs=blogs)
+
+@app.route("/timeline", methods=['POST', 'GET'])
+def timeline():
+    # blogs = Blog.query.all()
+    sort = request.args.get('sort')
+    if (sort=="newest"):
+        blogs = Blog.query.order_by(Blog.created.desc()).all()
+    else:
+        blogs = Blog.query.all()
+    return render_template('timeline.html', title="timeline", blogs=blogs)
+
+@app.route("/color", methods=['POST', 'GET'])
+def color():
+    """."""
+    title = 'Color'
+    return render_template('color.html', title=title)
 
 # disable browser caching
 @app.after_request
