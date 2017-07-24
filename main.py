@@ -232,6 +232,7 @@ def newpost(blog_title='', blog_body='', blog_error=''):
         if request.method == 'GET':
             return render_template('newpost.html', title=title)
         if request.method == 'POST':
+            error = False
             # users = query_all_users_lifo()
             blog_title = request.form['blog_title']
             blog_body = request.form['blog_body']
@@ -243,41 +244,39 @@ def newpost(blog_title='', blog_body='', blog_error=''):
 
             existing_blog_title = Blog.query.filter_by(title=blog_title).first()
             existing_blog_body = Blog.query.filter_by(body=blog_body).first()
-            # print(existing_blog_title)
-            # print(existing_blog_body)
             if existing_blog_title or existing_blog_body:
-                blog_error = "Duplicate Blog."
-                return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
+                error = True
+                flash("Duplicate Blog.")
             if not len(blog_title) in range(3, 50): # if len(blog_title) < 3 or len(blog_title) > 50:
-                blog_error = "Title must be between 3 to 50 characters."
-                return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
+                error = True
+                flash("Title must be between 3 to 50 characters.")
             if not len(blog_body) in range(3, 140): # if len(blog_body) < 3 or len(blog_body) > 140:
-                blog_error = "Body must be between 3 to 50 characters."
-                return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
+                error = True
+                flash("Body must be between 3 to 50 characters.")
             if blog_title == blog_body:
-                blog_error = "Title and body must be different"
-                return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
+                error = True
+                flash("Title and body must be different")
             offensive_list = offensive()
             for word in offensive_list:
                 if blog_title == word or blog_body == word:
-                    blog_error = "Please tone down that language."
-                    return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
+                    error = True
+                    flash("Please tone down that language.")
                 # Other ideas for improving on offensive list
                     # no combonations of these
                     # _ - ....
                     # pluralities verbs and past tense: s, es, ed, ing
                     # racist words, phrases and slurs
             if not blog_title.isalpha:
-                blog_error = "blog title must only contain characters in the alphabet."
-                return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body, blog_error=blog_error)
+                error = True
+                flash("blog title must only contain characters in the alphabet.")
+            if error == True:
+                return render_template('newpost.html', title='New Post', blog_title=blog_title, blog_body=blog_body)
+            # When all validations have passed, create user and store name, pw and id in session
             else:
-                # When all validations have passed, create user and store name, pw and id in session
-                create_new_blog(owner, blog_title, blog_body)
                 blog = create_new_blog(owner, blog_title, blog_body)
+
                 # on successful creation, show that new blog entry
                 blogs = query_all_blogs_lifo()
-                # return render_template('blog.html', title="Blog", blogs=blogs,
-                #                         blog_title=blog_title, blog_body=blog_body, owner=owner)
 
                 title = blog.owner.username + "'s New Blog Post"
                 # instead of listing all blogs the client wishes we show just the newly created blog
@@ -291,8 +290,7 @@ def myblogs(blog_title='', blog_body=''):
     if session:
         owner = User.query.filter_by(username=session['username']).first()
         blogs = Blog.query.filter_by(owner=owner).all()
-        return render_template('blog.html', title="My Blogs", blogs=blogs, blog_title=blog_title,
-                                blog_body=blog_body, owner=owner)
+        return render_template('blog.html', title="My Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body, owner=owner)
     else:
         return redirect('/login')
 
