@@ -146,7 +146,8 @@ def signup(users=''):
                 flash("Username must only contain characters in the alphabet.")
             # re-render page with alert on any errors
             if error == True:
-                return render_template('signup.html', title='Sign up', users=users, username=username, password=password, verify=verify)
+                return render_template('signup.html', title='Sign up', users=users, username=username,
+                                       password=password, verify=verify)
             else:
                 # When all validations have passed, create user and store name, pw and id in session
                 new_user = User(username, password)
@@ -165,11 +166,12 @@ def signup(users=''):
 
 def offensive():
     """Blacklist words for validations."""
-    offensive_list = ['bitch', 'cunt', 'dick', 'whore', 'slut', 'republican', 'trump', 'cock', 'pussy', 'twat', 'tits',
+    offensive_list = ['bitch', 'cunt', 'dick', 'whore', 'slut', 'republican', 'trump', 'cock', 'pussy', 'twat',
                 'porn', 'semen', 'ass', 'asshole', 'jizz', 'fuck', 'orgy', 'christ', 'death', 'shit', 'racist',
                 'piss', 'vagina', 'penis', 'boner', 'murder', 'hostage', 'kidnap', 'sex', 'feces', 'poop', 'crap',
-                'breast', 'genital', 'genitalia', 'scrotum', 'balls', 'ballsac', 'ballsack', 'clitoris', 'kkk', 'ku klux klan',
-                'assault', 'torture', 'domestic violence', 'suicide', 'kill', 'killer', 'fart', 'bile', 'bad words' ]
+                'breast', 'genital', 'genitalia', 'scrotum', 'balls', 'ballsac', 'ballsack', 'clitoris', 'kkk',
+                'assault', 'torture', 'domestic violence', 'suicide', 'kill', 'killer', 'fart', 'bile', 'bad words',
+                'tits', 'ku klux klan' ]
     return offensive_list
 
 @app.route('/logout', methods=['POST', 'GET'])
@@ -275,10 +277,8 @@ def newpost(blog_title='', blog_body='', blog_error=''):
             # When all validations have passed, create user and store name, pw and id in session
             else:
                 blog = create_new_blog(owner, blog_title, blog_body)
-
                 # on successful creation, show that new blog entry
                 blogs = query_all_blogs_lifo()
-
                 title = blog.owner.username + "'s New Blog Post"
                 # instead of listing all blogs the client wishes we show just the newly created blog
                 return render_template('singlePost.html', title=title, blog=blog)
@@ -291,7 +291,8 @@ def myblogs(blog_title='', blog_body=''):
     if session:
         owner = User.query.filter_by(username=session['username']).first()
         blogs = Blog.query.filter_by(owner=owner).all()
-        return render_template('blog.html', title="My Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body, owner=owner)
+        return render_template('blog.html', title="My Blogs", blogs=blogs, blog_title=blog_title,
+                                blog_body=blog_body, owner=owner)
     else:
         return redirect('/login')
 
@@ -308,8 +309,8 @@ def blog(blog_title='', blog_body='', blog_id=''):
         blog_id = get_id()
         blog = Blog.query.get(blog_id)
         blog_owner = blog.owner.username
-        return render_template('id.html', title="Blog", blog=blog,
-                               blog_title=blog_title, blog_body=blog_body, blog_id=blog_id, blog_owner=blog_owner)
+        return render_template('id.html', title="Blog", blog=blog, blog_title=blog_title,
+                                blog_body=blog_body, blog_id=blog_id, blog_owner=blog_owner)
     else:
         blogs = query_all_blogs_lifo()
         return render_template('blog.html', title="Blog", blogs=blogs)
@@ -432,11 +433,9 @@ def home():
     As per the clients request we render a list of user links.
     Could become a splash screen or signin."""
     users = query_all_users_lifo()
-
     users_names = []
     for user in users:
         users_names.append(user.username)
-
     return render_template('index.html', title='Greetings', directions='Click name to view users blogs', users=users)
 
 @app.route("/singleuser", methods=['POST', 'GET'])
@@ -448,10 +447,10 @@ def singleuser():
     owner = User.query.filter_by(username=username).first()
     owner_id = owner.id
     title = owner.username + "'s Blogs"
-
     blogs = Blog.query.filter_by(owner=owner).all()
     n_blogs = len(blogs)
-    return render_template('singleUser.html', title=title, blogs=blogs, users=users, user_id=user_id, username=username, owner=owner, owner_id=owner_id, n_blogs=n_blogs)
+    return render_template('singleUser.html', title=title, blogs=blogs, users=users, user_id=user_id,
+                           username=username, owner=owner, owner_id=owner_id, n_blogs=n_blogs)
 
 @app.route("/duck", methods=['POST', 'GET'])
 def duck():
@@ -465,7 +464,6 @@ def user_dot_blogs():
 
 @app.route("/timeline", methods=['POST', 'GET'])
 def timeline():
-    # blogs = Blog.query.all()
     sort = request.args.get('sort')
     if (sort=="newest"):
         blogs = Blog.query.order_by(Blog.created.desc()).all()
