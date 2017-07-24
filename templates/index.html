@@ -1,8 +1,6 @@
 {% extends 'template.html' %}
 {% block content %}
 <div class="panel-body">
-    <strong class='error' value="{{password_error}}">{{password_error}}</strong>
-    <strong class='error' value="{{username_error}}">{{username_error}}</strong>
     {% if users %}
         {% for user in users %}
         <div>
