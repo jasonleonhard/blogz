@@ -290,7 +290,8 @@ def myblogs(blog_title='', blog_body=''):
     """Only list my blogs."""
     if session:
         owner = User.query.filter_by(username=session['username']).first()
-        blogs = Blog.query.filter_by(owner=owner).all()
+        # blogs = Blog.query.filter_by(owner=owner).all() # not ordered by time
+        blogs = Blog.query.filter_by(owner=owner).order_by(Blog.created.desc()).all()
         return render_template('blog.html', title="My Blogs", blogs=blogs, blog_title=blog_title,
                                 blog_body=blog_body, owner=owner)
     else:
