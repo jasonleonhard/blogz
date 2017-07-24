@@ -29,8 +29,12 @@ def current_session():
     if len(users) == 0:
         return redirect('/signup')
     if session:
-        print("\n" + str(session) + "\n")
-        return render_template('session.html', users=users, title='Session')
+        if session['username'] == 'Admin':
+            flash(session['username'] + ' signed in')
+            print("\n" + str(session) + "\n")
+            return render_template('session.html', users=users, title='Session')
+        else:
+            return render_template('session.html', users=users, title='Session')
     else:
         return redirect('/login')
 

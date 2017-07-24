@@ -35,13 +35,17 @@
                                 <table class="table table-condensed no_bottom_margin">
                                     <tr>
                                         <th>user.username</th>
-                                        <th>user.password</th>
+                                        {% if session['username'].upper() == user.username.upper() or session['username'] == 'Admin' %}
+                                        <td>user.password</td>
+                                        {% endif %}
                                         <th>user.id</th>
                                     </tr>
                                     <tr>
                                     {% if user in users %}
                                         <td>{{user.username}}</td>
+                                        {% if session['username'].upper() == user.username.upper() or session['username'] == 'Admin' %}
                                         <td>{{user.password}}</td>
+                                        {% endif %}
                                         <td>{{user.id}}</td>
                                         <!--<hr style="margin: 0;">-->
                                     {% endif %}
