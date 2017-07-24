@@ -156,7 +156,6 @@ def signup(users=''):
                 db.session.commit()
                 session['username'] = username
                 session['password'] = password
-
                 # re-query all users so when page shows again it will reflect new user
                 users = query_all_users_lifo()
                 user = User.query.filter_by(username=username).first()
@@ -323,54 +322,36 @@ def blogs(blogs='', owner='', blog_title='', blog_body=''):
    # Avoid validation first time template is rendered and on post rerenders when error
     return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
 
-# @app.route('/delete-user', methods=['GET', 'POST'])
-# def delete_user():
-#     """Delete user works. grabs hidden user id from form, queries by it and deletes with db commit."""
-#     # if request.method == 'POST':
-#     user_id = int(request.form['user-id'])
-#     user = User.query.get(user_id)
-#     db.session.delete(user)
-#     db.session.commit()
-#     if session:
-#         del session['id']
-#         del session['username']
-#         del session['password']
-#     return redirect('/signup')
-
 @app.route('/delete-user', methods=['GET', 'POST'])
 def delete_user():
     """This version hides user instead of removing from db.
     grabs hidden user id from form, queries by it and 'deletes' by hiding."""
-    # # if request.method == 'POST':
-    # user_id = int(request.form['user-id'])
-    # user = User.query.get(user_id)
-
-    # db.session.delete(user)
-    # db.session.commit()
-    # if session:
-    #     del session['id']
-    #     del session['username']
-    #     del session['password']
-    # return redirect('/signup')
-
     user_id = int(request.form['user-id'])
-    # user_id = request.form['crossed-off-User']
     hide_user = User.query.get(user_id)
-
     if not hide_user:
         return redirect("/?error=Attempt to watch a User unknown to this database")
-
-    # if we didn't redirect by now, then all is well
     hide_user.hidden = True
     db.session.add(hide_user)
     db.session.commit()
     return render_template('signup.html', hide_user=hide_user)
 
+@app.route('/delete-user2', methods=['GET', 'POST'])
+def delete_user2():
+    """Delete user works. grabs hidden user id from form, queries by it and deletes with db commit."""
+    user_id = int(request.form['user-id'])
+    user = User.query.get(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    if session:
+        del session['id']
+        del session['username']
+        del session['password']
+    return redirect('/signup')
+
 def deleting_blog():
     """Delete a blog by blog-id we use request parameters and session."""
     blog_id = int(request.form['blog-id'])
     blog_target = Blog.query.get(blog_id)
-
     if session['username'].upper() == blog_target.owner.username.upper():
         db.session.delete(blog_target)
         db.session.commit()
