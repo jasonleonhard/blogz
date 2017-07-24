@@ -28,12 +28,12 @@
                                     </h4>
                                 </a>
                                 <p class='wrap'>{{blog.body}}</p>
+                                {% include 'date.html' %}
                                 {% if blog.owner.username %}
                                     <span class="label label-default right">{{blog.owner.username}}</span>
                                     <!--<p>Owner-id:        { {blog.owner.id}}</p>-->
                                     <!--<p>Blog-id:         { { blog.id}}</p>-->
                                 {% endif %}
-                                {% include 'date.html' %}
                                 {% include 'delete_blog_form.html' %}
                             </div>
                         </div>

@@ -15,10 +15,11 @@
             <form method="POST" action="/delete_blog3" class='left'>
                 <input type="hidden" name="blog-id" value="{{id}}"/>
             </form>
-            <div class="left">
+            <div class="">
                 <h3 class='no_top_margin wrap'>{{blog_title}}</h3>
                 <p class='wrap'>{{blog_body}}</p>
                 <input type="submit" value="Delete" class="btn btn-primary btn-xs"/>
+                {% include 'date.html' %}
                 <a href="/singleuser?username={{blog_owner}}&user_id={{blog_id}}">
                     <span class="label label-default right">{{blog_owner}}</span>
                 </a>

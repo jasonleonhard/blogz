@@ -19,6 +19,7 @@
                             </h4>
                         </a>
                         <p class='wrap'>{{blog.body}}</p>
+                        {% include 'date.html' %}
                         {% if blog.owner.username %}
                             <!--linkable user tag-->
                             <a href="/singleuser?username={{blog.owner.username}}&user_id={{blog.owner.id}}">
@@ -27,7 +28,6 @@
                                 <!--<p>Blog-id: { {blog.id}}</p>-->
                             </a>
                         {% endif %}
-                        {% include 'date.html' %}
                         {% include 'delete_blog_form.html' %}
                     </div>
                 </div>

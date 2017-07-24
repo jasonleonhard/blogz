@@ -310,7 +310,7 @@ def blog(blog_title='', blog_body='', blog_id=''):
         blog_id = get_id()
         blog = Blog.query.get(blog_id)
         blog_owner = blog.owner.username
-        return render_template('id.html', title="Blog",
+        return render_template('id.html', title="Blog", blog=blog,
                                blog_title=blog_title, blog_body=blog_body, blog_id=blog_id, blog_owner=blog_owner)
     else:
         blogs = query_all_blogs_lifo()
