@@ -21,6 +21,7 @@
                             </h4>
                         </a>
                         <p class='wrap'>{{blog.body}}</p>
+                        {% include 'date.html' %}
                         {% if blog.owner.username %}
                             {% include 'blog_owner_link.html' %}
                         {% endif %}
