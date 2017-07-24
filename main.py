@@ -9,7 +9,7 @@ import hashutils
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'static']
+    allowed_routes = ['login', 'signup', 'static', 'home']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
@@ -66,6 +66,7 @@ def salt():
     if request.method == 'GET':
         return render_template('salt.html', title='Salt')
     if request.method == 'POST':
+        # original
         # password = request.form['password']
         # hashed_password = password + hashutils.make_salt()
         # password = request.form['hashed_password']
