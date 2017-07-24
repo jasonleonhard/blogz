@@ -315,16 +315,17 @@ def blog(blog_title='', blog_body='', blog_id=''):
                                blog_title=blog_title, blog_body=blog_body, blog_id=blog_id)
 
 @app.route("/blogs")
-def blogs(blogs='', owner='', blog_title='', blog_body='', blog_title_error='', blog_body_error='',
+def blogs(blogs='', owner='', blog_title='', blog_body=''):
           prev_blog_title='', prev_blog_body=''):
     """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
+    error = False
     blogs = query_all_blogs_lifo()
     # add to database
     if request.args: # if request.method == 'GET':
         blog_title = get_title()
         blog_body = get_body()
     else: # Avoid validation first time template is rendered
-        return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
+        # return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
 
     # Validation Section # make sure that
     # last blog is not the same as next blog
@@ -334,12 +335,16 @@ def blogs(blogs='', owner='', blog_title='', blog_body='', blog_title_error='', 
         prev_blog_body = Blog.query.order_by('-id').first().body
     # different blog titles and bodies
     if blogs_have_same_content(prev_blog_title, blog_title, prev_blog_body, blog_body):
-        blog_title_error = 'Blogs must be different'
+        error = True
+        flash('Blogs must be different')
     # not blank
     if no_field_blank(blog_title, blog_body):
-        blog_title_error = 'Must not leave any field blank'
+        error = True
+        flash('Must not leave any field blank')
     # actual adding of new blog to DB
-    if not blog_title_error or blog_body_error:
+    if error == True:
+        return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
+    else:
         create_new_blog(blog_title, blog_body, owner)
         blogs = query_all_blogs_lifo()
     # no errors on page or rerender page with errors
