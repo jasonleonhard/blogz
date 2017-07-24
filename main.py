@@ -198,8 +198,8 @@ def login():
             # if user and pw_hash: # hashed pw
                 session['username'] = username
                 session['password'] = password
-                    # session['pw_hash'] = pw_hash
-                    # session['password'] = pw_hash
+                # session['pw_hash'] = pw_hash
+                # session['password'] = pw_hash
                 session['id'] = user.id
                 db.session.commit()
                 flash("Logged in as: " + username)
@@ -226,7 +226,8 @@ def newpost(blog_title='', blog_body='', blog_error=''):
         grab imputs
           title
           body
-    Create new blog and validate. Does not list blogs."""
+    Create new blog and validate.
+    Render new blog."""
     title = "New Blog Post"
     if session:
         if request.method == 'GET':
@@ -297,7 +298,7 @@ def myblogs(blog_title='', blog_body=''):
 @app.route("/blog")
 def blog(blog_title='', blog_body='', blog_id=''):
     """Lists all blogs. Does not allow new blog creation nor validation.
-        aka if given the correct url the id template will render all 3 requested
+        if given the correct url param for id then template will render a specific entry
             http://localhost:5000/blog?id=366&blog_title=title&blog_body=body
         otherwise:
             http://localhost:5000/blog"""
@@ -311,46 +312,14 @@ def blog(blog_title='', blog_body='', blog_id=''):
                                blog_title=blog_title, blog_body=blog_body, blog_id=blog_id, blog_owner=blog_owner)
     else:
         blogs = query_all_blogs_lifo()
-        return render_template('blog.html', title="Blog", blogs=blogs,
-                               blog_title=blog_title, blog_body=blog_body, blog_id=blog_id)
+        return render_template('blog.html', title="Blog", blogs=blogs)
 
 @app.route("/blogs")
 def blogs(blogs='', owner='', blog_title='', blog_body=''):
-          prev_blog_title='', prev_blog_body=''):
     """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
-    error = False
     blogs = query_all_blogs_lifo()
-    # add to database
-    if request.args: # if request.method == 'GET':
-        blog_title = get_title()
-        blog_body = get_body()
-    else: # Avoid validation first time template is rendered
-        # return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
-
-    # Validation Section # make sure that
-    # last blog is not the same as next blog
-    blog_count = Blog.query.count()
-    if blog_count:
-        prev_blog_title = Blog.query.order_by('-id').first().title
-        prev_blog_body = Blog.query.order_by('-id').first().body
-    # different blog titles and bodies
-    if blogs_have_same_content(prev_blog_title, blog_title, prev_blog_body, blog_body):
-        error = True
-        flash('Blogs must be different')
-    # not blank
-    if no_field_blank(blog_title, blog_body):
-        error = True
-        flash('Must not leave any field blank')
-    # actual adding of new blog to DB
-    if error == True:
-        return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
-    else:
-        create_new_blog(blog_title, blog_body, owner)
-        blogs = query_all_blogs_lifo()
-    # no errors on page or rerender page with errors
-    return render_template('blogs.html', title="Blogs", blogs=blogs,
-                           blog_title=blog_title, blog_body=blog_body,
-                           blog_title_error=blog_title_error, blog_body_error=blog_body_error)
+   # Avoid validation first time template is rendered and on post rerenders when error
+    return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
 
 # @app.route('/delete-user', methods=['GET', 'POST'])
 # def delete_user():
@@ -463,34 +432,10 @@ def home():
     As per the clients request we render a list of user links.
     Could become a splash screen or signin."""
     users = query_all_users_lifo()
-    # WIP: add blog count
-    # for user in users:
 
     users_names = []
     for user in users:
         users_names.append(user.username)
-    # print(users_names)
-    # print()
-    # count1 = 0
-    # count2 = 0
-    # count3 = 0
-    # blogs = query_all_blogs_lifo()
-    # for blog in blogs():
-    #     if blog.owner == 'Robot':
-    #         count1 += 1
-    #     if blog.owner == 'Kitten':
-    #         count2 += 1
-    #     if blog.owner == 'Dingo':
-    #         count3 += 1
-    # print()
-    # print(users)
-    # print()
-    # print(blogs)
-    # print()
-
-    # for blog in blogs:
-    #     if blog
-    #     if len(blog.) == 0:
 
     return render_template('index.html', title='Greetings', directions='Click name to view users blogs', users=users)
 
@@ -506,10 +451,6 @@ def singleuser():
 
     blogs = Blog.query.filter_by(owner=owner).all()
     n_blogs = len(blogs)
-    # print('user_id: ' + user_id)              # 2
-    # print('username: ' + username)            # Robot
-    # print('str(owner_id): ' + str(owner_id))  # 2
-    # print('str(n_blogs): ' + str(n_blogs))    # 0
     return render_template('singleUser.html', title=title, blogs=blogs, users=users, user_id=user_id, username=username, owner=owner, owner_id=owner_id, n_blogs=n_blogs)
 
 @app.route("/duck", methods=['POST', 'GET'])
