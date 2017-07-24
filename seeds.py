@@ -45,63 +45,65 @@ db.session.add(blog3)
 blog4 = Blog('Bucket of bolts', 'How I managed to replace half the worlds jobs in under a century: Bleep Blop Bloop', user2)
 db.session.add(blog4)
 
-# to check length limitations
-blog5 = Blog('Bucket of bolts, hey who you calling bucket of bolts?!?', 'How I managed to replace half the worlds jobs in under a century: Bleep Blop Bloop How I managed to replace half the worlds jobs in under a century: Bleep Blop Bloop', user2)
+blog5 = Blog('meow for can opener to feed me, Chase after silly colored fish toys around the house plop down in the middle where everybody walks yet scratch leg', user3)
 db.session.add(blog5)
+
+blog6 = Blog('Jump on human and sleep on her all night long be long in the bed', 'purr in the morning and then give a bite to every human around for not waking up request food, purr loud scratch the walls', user3)
+db.session.add(blog6)
 
 db.session.commit()
 # exit()
 ###########################################################################
-# Ref.
-users = User.query.all()
-blogs = Blog.query.all()
-# blogs             # view all
-# blogs[0].name     # view first
-# blogs[0].title    # view first title
-# blogs[0].body     # view first body
-# blogs[0].owner    # view first owner object aka user who posted
-# blogs[0].owner.id # view first owner id
-# blogs[0].owner.username # view first owner id
-print()
-print('blogs[0].owner.username')
-print(blogs[0].owner.username) # Dingo
-print()
-print('blogs[0].owner.id')
-print(blogs[0].owner.id)       # 1
-print()
-print('users[0].username')
-print(users[0].username)       # Dingo
-print()
-print('users[0].id')
-print(users[0].id)             # 1
-print()
-print('if users[0].id == blogs[0].owner.id: return or print True')
-if users[0].id == blogs[0].owner.id:
-    print(True)
-###########################################################################
-# session['username'] = username
-# owner = User.query.filter_by(username=session['username'])
-print()
-username = users[0].username
-print('username')
-print(username)  # Dingo
-print()
-users = User.query.filter_by(username=username)
-print('users')
-print(users)
-    # SELECT user.id AS user_id, user.username AS user_username, user.password AS user_password
-    # FROM user
-    # WHERE user.username = %(username_1)s
-print()
-print('users[0]')
-print(users[0])
-print()
-print('users[0].username')
-print(users[0].username)    # Dingo # and associated SQL query
-print()
-print('users[0].id')
-print(users[0].id)          # 1     # and associated SQL query
-print()
+# # Ref.
+# users = User.query.all()
+# blogs = Blog.query.all()
+# # blogs             # view all
+# # blogs[0].name     # view first
+# # blogs[0].title    # view first title
+# # blogs[0].body     # view first body
+# # blogs[0].owner    # view first owner object aka user who posted
+# # blogs[0].owner.id # view first owner id
+# # blogs[0].owner.username # view first owner id
+# print()
+# print('blogs[0].owner.username')
+# print(blogs[0].owner.username) # Dingo
+# print()
+# print('blogs[0].owner.id')
+# print(blogs[0].owner.id)       # 1
+# print()
+# print('users[0].username')
+# print(users[0].username)       # Dingo
+# print()
+# print('users[0].id')
+# print(users[0].id)             # 1
+# print()
+# print('if users[0].id == blogs[0].owner.id: return or print True')
+# if users[0].id == blogs[0].owner.id:
+#     print(True)
+# ###########################################################################
+# # session['username'] = username
+# # owner = User.query.filter_by(username=session['username'])
+# print()
+# username = users[0].username
+# print('username')
+# print(username)  # Dingo
+# print()
+# users = User.query.filter_by(username=username)
+# print('users')
+# print(users)
+#     # SELECT user.id AS user_id, user.username AS user_username, user.password AS user_password
+#     # FROM user
+#     # WHERE user.username = %(username_1)s
+# print()
+# print('users[0]')
+# print(users[0])
+# print()
+# print('users[0].username')
+# print(users[0].username)    # Dingo # and associated SQL query
+# print()
+# print('users[0].id')
+# print(users[0].id)          # 1     # and associated SQL query
+# print()
 ###########################################################################
 # # TODO: instead of deleting, add new column that marks hidden=True
 
