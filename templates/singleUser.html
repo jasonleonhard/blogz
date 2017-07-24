@@ -24,9 +24,10 @@
                         {% include 'date.html' %}
                         {% if blog.owner.username %}
                             {% include 'blog_owner_link.html' %}
+                            <!-- { % if blog.owner.username == session['username'] %} -->
+                                {% include 'delete_blog_form.html' %}
+                            <!-- { % endif %} -->
                         {% endif %}
-
-                        {% include 'delete_blog_form.html' %}
                     </div>
                 </div>
                 <!-- { % endif %} -->
