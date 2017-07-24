@@ -32,9 +32,7 @@ def current_session():
         if session['username'] == 'Admin':
             flash(session['username'] + ' signed in')
             print("\n" + str(session) + "\n")
-            return render_template('session.html', users=users, title='Session')
-        else:
-            return render_template('session.html', users=users, title='Session')
+        return render_template('session.html', users=users, title='Session')
     else:
         return redirect('/login')
 
@@ -111,46 +109,44 @@ def signup(users=''):
         return redirect('/newpost')
     else:
         users = query_all_users_lifo()
-        # if request.method == 'GET':
-        #     username = ''
-        #     return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
-
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
             verify = request.form['verify']
-            # validate user's data
-            # if not existing_user:
+            error = False
             if verify == '' or password == '' or username == '':
-                username_error = "Must not leave any field blank."
-                return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
+                error = True
+                flash("Must not leave any field blank.")
             if verify != password:
-                username_error = "Password and verify do not match."
-                return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
+                error = True
+                flash("Password and verify do not match.")
             # only allow unique user names to be created
             existing_user = User.query.filter_by(username=username).first()
             if existing_user:
-                username_error = "Duplicate user."
-                return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
+                error = True
+                flash("Duplicate user.")
             if len(username) < 3 or len(password) < 3:
-                username_error = "Username and password must be at least 3 characters."
-                return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
+                error = True
+                flash("Username and password must be at least 3 characters.")
             if username == password:
-                username_error = "Username and password must be different"
-                return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
+                error = True
+                flash("Username and password must be different.")
             offensive_list = offensive()
             for word in offensive_list:
                 if username == word or password == word:
-                    username_error = "Please tone down that language."
-                    return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
+                    error = True
+                    flash("Please tone down that language.")
                 # Other ideas for improving on offensive list
                     # no combonations of these
                     # _ - ....
                     # pluralities verbs and past tense: s, es, ed, ing
                     # racist words, phrases and slurs
             if not username.isalpha:
-                username_error = "Username must only contain characters in the alphabet."
-                return render_template('signup.html', title='Sign up', users=users, username_error=username_error, username=username, password=password, verify=verify)
+                error = True
+                flash("Username must only contain characters in the alphabet.")
+            # re-render page with alert on any errors
+            if error == True:
+                return render_template('signup.html', title='Sign up', users=users, username=username, password=password, verify=verify)
             else:
                 # When all validations have passed, create user and store name, pw and id in session
                 new_user = User(username, password)
@@ -163,8 +159,8 @@ def signup(users=''):
                 users = query_all_users_lifo()
                 user = User.query.filter_by(username=username).first()
                 session['id'] = user.id
-                # username_error = "Duplicate user"
                 return render_template('signup.html', title='Sign up', users=users)
+        flash("Welcome!")
         return render_template('signup.html', title='Sign up', users=users)
 
 def offensive():
