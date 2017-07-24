@@ -82,7 +82,6 @@ def salt():
         hashed_password = password + hash
         print(hashed_password)
         password = hashutils.check_pw_hash(password, hash)
-        # check_result = hashutils.check_pw_hash(password, hash)
         return render_template('salt.html', title='Salt', password=password, hashed_password=hashed_password)
 
 @app.route('/signup', methods=['POST', 'GET'])
@@ -401,8 +400,17 @@ def deleting_blog():
     """Delete a blog by blog-id we use request parameters and session."""
     blog_id = int(request.form['blog-id'])
     blog_target = Blog.query.get(blog_id)
-    db.session.delete(blog_target)
-    db.session.commit()
+
+    if session['username'].upper() == blog_target.owner.username.upper():
+        db.session.delete(blog_target)
+        db.session.commit()
+        flash("Blog successfully deleted.")
+    elif session['username'].upper() == 'ADMIN':
+        db.session.delete(blog_target)
+        db.session.commit()
+        flash("Blog successfully deleted.")
+    else:
+        flash("Only admin can delete another users blogs.")
 
 @app.route("/delete_blog", methods=['GET', 'POST'])
 def delete_blog():
@@ -499,12 +507,10 @@ def singleuser():
 
     blogs = Blog.query.filter_by(owner=owner).all()
     n_blogs = len(blogs)
-    print()
-    print('user_id: ' + user_id)              # 2
-    print('username: ' + username)            # Robot
-    print('str(owner_id): ' + str(owner_id))  # 2
-    print('str(n_blogs): ' + str(n_blogs))    # 0
-    print()
+    # print('user_id: ' + user_id)              # 2
+    # print('username: ' + username)            # Robot
+    # print('str(owner_id): ' + str(owner_id))  # 2
+    # print('str(n_blogs): ' + str(n_blogs))    # 0
     return render_template('singleUser.html', title=title, blogs=blogs, users=users, user_id=user_id, username=username, owner=owner, owner_id=owner_id, n_blogs=n_blogs)
 
 @app.route("/duck", methods=['POST', 'GET'])
