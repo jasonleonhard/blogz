@@ -1,6 +1,6 @@
 <p>
     <a href="https://colorfi.herokuapp.com/">
-        <img src="https://github.com/jasonleonhard/user-signup/blob/master/images/colorfi.gif?raw=true" alt="user-signup" height="">
+        <img src="https://github.com/jasonleonhard/blogz/blob/master/images/colorfi.gif?raw=true" alt="user-signup" height="">
     </a>
 </p>
 
