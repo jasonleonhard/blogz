@@ -32,8 +32,6 @@
                                 {% include 'date.html' %}
                                 {% if blog.owner.username %}
                                     <span class="label label-default right">{{blog.owner.username}}</span>
-                                    <!--<p>Owner-id:        { {blog.owner.id}}</p>-->
-                                    <!--<p>Blog-id:         { { blog.id}}</p>-->
                                 {% endif %}
                                 {% include 'delete_blog_form.html' %}
                             </div>
@@ -41,7 +39,6 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <!-- <p class="error">{ {blog_error}}</p> -->
                 <p class="error">No blogs yet</p>
             {% endif %}
         </div>
