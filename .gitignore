@@ -101,4 +101,5 @@ ENV/
 NOTES
 .DS_Store
 .vscode
+.vscode/tags
 readme_assets
