@@ -61,7 +61,10 @@ ul { list-style: none; }
 .pl1 { padding-left: 1%; }
 .pr1 { padding-right: 1%; }
 
-.b0 { border-width: 0px !important; }
+.b0 {
+    border: 0px !important;
+    border-width: 0px !important;
+}
 
 .p1 { padding: 1%; }
 

@@ -5,7 +5,7 @@
     {% if session %}
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
     {% endif %}
-    <div class="panel panel-primary see_through01">
+    <div class="panel panel-primary see_through01 b0">
         <div class="right">{% include 'sort_links.html' %}</div>
         <div class="panel-heading">
             <h1 class='mt0 mb0'>{{title}}</h1>
@@ -25,8 +25,6 @@
                             <!--linkable user tag-->
                             <a href="/singleuser?username={{blog.owner.username}}&user_id={{blog.owner.id}}">
                                 <span class="label label-default right">{{blog.owner.username}}</span>
-                                <!--WIP: add count to name to show how many posts user has-->
-                                <!--<p>Blog-id: { {blog.id}}</p>-->
                             </a>
                         {% endif %}
                         {% include 'delete_blog_form.html' %}
@@ -34,8 +32,16 @@
                 </div>
             {% endfor %}
         {% else %}
-            <p class="error">{{blog_error}}</p>
-            <p class="error">No blogs yet</p>
+            <div class='panel panel-default mb0'>
+                <div class='panel-body see_through2'>
+                    <!-- <p class="error">{{blog_error}}</p> -->
+                    <p class="error"><b>No blogs yet.</b></p>
+                    <a href="/newpost">
+                        <span class="label label-default">create a blog</span>
+                    </a>
+
+                </div>
+            </div>
         {% endif %}
     </div>
 </div>
