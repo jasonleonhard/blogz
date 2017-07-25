@@ -45,7 +45,8 @@ def userlist():
          if not then
            redirect to signup page
     """
-    users = query_all_users_lifo()
+    users = query_all_users_by_name()
+    # users = query_all_users_lifo()
     if len(users) == 0:
         return redirect('/signup')
     else:
@@ -292,6 +293,9 @@ def myblogs(blog_title='', blog_body=''):
         owner = User.query.filter_by(username=session['username']).first()
         # blogs = Blog.query.filter_by(owner=owner).all() # not ordered by time
         blogs = Blog.query.filter_by(owner=owner).order_by(Blog.created.desc()).all()
+
+        # sort = request.args.get('sort')
+        # blogs = sort_blogs(sort)
         return render_template('blog.html', title="My Blogs", blogs=blogs, blog_title=blog_title,
                                 blog_body=blog_body, owner=owner)
     else:
@@ -319,10 +323,10 @@ def blog(blog_title='', blog_body='', blog_id=''):
 
     else:
         # sort = request.args.get('sort')
-        # blogs = sorting(sort)
+        # blogs = sort_blogs(sort)
 
         sort = request.args.get('sort')
-        blogs = sorting(sort)
+        blogs = sort_blogs(sort)
 
         # blogs = query_all_blogs_lifo()
         return render_template('blog.html', title="Blog", blogs=blogs)
@@ -332,7 +336,7 @@ def blogs(blogs='', owner='', blog_title='', blog_body=''):
     """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
     # blogs = query_all_blogs_lifo()
     sort = request.args.get('sort')
-    blogs = sorting(sort)
+    blogs = sort_blogs(sort)
 
    # Avoid validation first time template is rendered and on post rerenders when error
     return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
@@ -408,6 +412,14 @@ def get_id():
     """Accessing get request parameters of body."""
     return request.args.get('id')
 
+def query_all_users_lifo():
+    """LIFO query all blogs, aka reverse order."""
+    return User.query.order_by(User.username.desc()).all()
+
+def query_all_users_by_name():
+    """LIFO query all blogs, aka reverse order."""
+    return User.query.order_by(User.username).all()
+
 def get_owner():
     """Accessing get request parameters of body."""
     return request.args.get('owner')
@@ -419,10 +431,6 @@ def query_all_blogs_fifo():
 def query_all_blogs_lifo():
     """LIFO query all blogs, aka reverse order."""
     return Blog.query.order_by(Blog.created.desc()).all()
-
-def query_all_users_lifo():
-    """LIFO query all blogs, aka reverse order."""
-    return User.query.order_by(User.username.desc()).all()
 
 def query_all_blogs_by_title():
     return Blog.query.order_by(Blog.title.desc()).all()
@@ -462,7 +470,7 @@ def user_dot_blogs():
     blogs = Blog.query.all()
     return render_template('user_dot_blogs.html', title="User.blogs", users=users, blogs=blogs)
 
-def sorting(sort, blogs=''):
+def sort_blogs(sort, blogs=''):
     sort = sort
     if sort:
         if (sort=="newest"):
@@ -485,7 +493,7 @@ def sorting(sort, blogs=''):
 def timeline():
     """Provide alternate viewing with params http://localhost:5000/timeline?sort=title"""
     sort = request.args.get('sort')
-    blogs = sorting(sort)
+    blogs = sort_blogs(sort)
 
     # TODO: consider creating drop down menu or form instead of query params
     # if request.method == 'POST':
