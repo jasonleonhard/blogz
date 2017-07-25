@@ -6,14 +6,14 @@
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
     {% endif %}
     {% if blogs %}
-        <div class="panel panel-primary see_through01">
+        <div class="panel panel-primary see_through01 b0">
             <div class="panel-heading">
                 <h1 class='mt0 mb0'>{{title}}</h1>
             </div>
             {% for blog in blogs %}
                 <!--double checking-->
                 <!-- { % if blog.owner.id == owner_id %} -->
-                <div class='panel panel-default mb3'>
+                <div class='panel panel-default mb3 b0'>
                     <div class='panel-body see_through2'>
                         <a href="{{ url_for('blog', id=blog.id, blog_title=blog.title, blog_body=blog.body) }}">
                             <h4 class='no_top_margin'>
