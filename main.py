@@ -289,18 +289,20 @@ def newpost(blog_title='', blog_body='', blog_error=''):
 @app.route("/myblogs", methods=['POST', 'GET'])
 def myblogs(blog_title='', blog_body=''):
     """Only list my blogs."""
+    owner = User.query.filter_by(username=session['username']).first()
     if session:
-        owner = User.query.filter_by(username=session['username']).first()
-        # blogs = Blog.query.filter_by(owner=owner).all() # not ordered by time
-        blogs = Blog.query.filter_by(owner=owner).order_by(Blog.created.desc()).all()
-
-        # sort = request.args.get('sort')
-        # blogs = sort_blogs(sort)
+        sort = request.args.get('sort')
+        if sort:
+            blogs = sort_myblogs(sort)
+        # condition that sort has nothing
+        else:
+            owner = User.query.filter_by(username=session['username']).first()
+            sort = sort
+            blogs = Blog.query.filter_by(owner=owner).order_by(Blog.created).all()
         return render_template('blog.html', title="My Blogs", blogs=blogs, blog_title=blog_title,
-                                blog_body=blog_body, owner=owner)
+                                blog_body=blog_body, owner=owner, sort=sort)
     else:
         return redirect('/login')
-
 
 @app.route("/blog")
 def blog(blog_title='', blog_body='', blog_id=''):
@@ -469,6 +471,26 @@ def user_dot_blogs():
     users = query_all_users_lifo()
     blogs = Blog.query.all()
     return render_template('user_dot_blogs.html', title="User.blogs", users=users, blogs=blogs)
+
+def sort_myblogs(sort):
+    owner = User.query.filter_by(username=session['username']).first()
+    sort = sort
+    if sort:
+        if (sort=="newest"):
+            blogs = Blog.query.filter_by(owner=owner).order_by(Blog.created).all()
+        if (sort=="oldest"):
+            blogs = Blog.query.filter_by(owner=owner).order_by(Blog.created.desc()).all() # only my blogs
+        if (sort=="title"):
+            blogs = Blog.query.filter_by(owner=owner).order_by(Blog.title).all() # only my blogs
+        if (sort=="title2"):
+            blogs = Blog.query.filter_by(owner=owner).order_by(Blog.title.desc()).all() # only my blogs
+        if (sort=="user"):
+            blogs = Blog.query.filter_by(owner=owner).order_by(Blog.owner_id).all() # only my blogs
+        if (sort=="user2"):
+            blogs = Blog.query.filter_by(owner=owner).order_by(Blog.owner_id.desc()).all()
+    else:
+        blogs = Blog.query.filter_by(owner=owner).order_by(Blog.created.all())
+    return blogs
 
 def sort_blogs(sort, blogs=''):
     sort = sort
