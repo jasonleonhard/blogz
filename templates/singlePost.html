@@ -1,7 +1,7 @@
 {% extends 'template.html' %}
 {% block content %}
-<div class="panel-body no_bottom_margin p1">
-    <div class='panel panel-default mb1'>
+<div class="panel-body no_bottom_margin p0">
+    <div class='panel panel-default mb0'>
         <div class='panel-body'>
             {% if blog %}
                 <div class="">
@@ -14,6 +14,7 @@
                     {% endif %}
                     {% include 'delete_blog_form.html' %}
                 </div>
+                    {% include 'date.html' %}
             {% else %}
                 <p class="error">{{blog_error}}</p>
                 <p class="error">No blogs yet</p>
