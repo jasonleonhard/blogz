@@ -5,7 +5,6 @@ from app import app, db
 from models import User, Blog
 from lib import *
 import hashutils
-# from hashutils import check_pw_hash
 
 @app.before_request
 def require_login():
@@ -46,7 +45,6 @@ def userlist():
            redirect to signup page
     """
     users = query_all_users_by_name()
-    # users = query_all_users_lifo()
     if len(users) == 0:
         return redirect('/signup')
     else:
@@ -237,12 +235,10 @@ def newpost(blog_title='', blog_body='', blog_error=''):
             return render_template('newpost.html', title=title)
         if request.method == 'POST':
             error = False
-            # users = query_all_users_lifo()
             blog_title = request.form['blog_title']
             blog_body = request.form['blog_body']
             username = session['username']
             owner = User.query.filter_by(username=username).first()
-            # blogs = Blog.query.filter_by(owner=owner).all()
             user_id = session['id']
             user = User.query.get(user_id)
 
@@ -335,10 +331,8 @@ def blog(blog_title='', blog_body='', blog_id=''):
 def blogs(blogs='', owner='', blog_title='', blog_body=''):
     """Show all '/blogs' and allow for sorting, this version does not paginate by default"""
     # TODO: allow for sorting when using pagination
-    # blogs = query_all_blogs_lifo()
     sort = request.args.get('sort')
     blogs = sort_blogs(sort)
-
    # Avoid validation first time template is rendered and on post rerenders when error
     return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
 
@@ -349,7 +343,7 @@ def blogs_paging(blogs='', owner='', blog_title='', blog_body='', page=1):
     per_page = 4
     # blogs = Blog.query.order_by(Blog.created.desc()).paginate(page, per_page, error_out=False)
     sort = request.args.get('sort')
-    blogs = sort_blogs(sort)
+    blogs = sort_blogs(sort, blogs)
     blogs = Blog.query.order_by(Blog.created.desc()).paginate(page, per_page, error_out=False)
     # Avoid validation first time template is rendered
     return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
@@ -534,20 +528,11 @@ def timeline():
     """Provide alternate viewing with params http://localhost:5000/timeline?sort=title"""
     sort = request.args.get('sort')
     blogs = sort_blogs(sort)
-
     # TODO: consider creating drop down menu or form instead of query params
     # if request.method == 'POST':
     #     # sort = request.form['sort']
     #     sort = request.args.get('sort')
     #     print(str(sort))
-
-    # if request.args:
-    #     sort = sort()
-
-        # blogs = sort()
-    # else:
-        # blogs = Blog.query.order_by(Blog.created.desc()).all()
-    # return render_template('timeline.html', title="timeline", blogs=blogs, sort=sort)
     return render_template('timeline.html', title="timeline", blogs=blogs, sort=sort)
 
 @app.route("/color", methods=['POST', 'GET'])
@@ -564,7 +549,6 @@ def add_header(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
-
 
 if __name__ == '__main__':
     app.run()
