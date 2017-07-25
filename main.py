@@ -297,6 +297,7 @@ def myblogs(blog_title='', blog_body=''):
     else:
         return redirect('/login')
 
+
 @app.route("/blog")
 def blog(blog_title='', blog_body='', blog_id=''):
     """Lists all blogs. Does not allow new blog creation nor validation.
@@ -304,22 +305,35 @@ def blog(blog_title='', blog_body='', blog_id=''):
             http://localhost:5000/blog?id=366&blog_title=title&blog_body=body
         otherwise:
             http://localhost:5000/blog"""
-    if request.args:
+
+    # individual blog
+    # if request.args:
+    if request.args.get('id'):
         blog_title = get_title()
         blog_body = get_body()
         blog_id = get_id()
-        blog = Blog.query.get(blog_id)
+        blog = Blog.query.get(blog_id).order_by(Blog.created.desc()).all()
         blog_owner = blog.owner.username
         return render_template('id.html', title="Blog", blog=blog, blog_title=blog_title,
                                 blog_body=blog_body, blog_id=blog_id, blog_owner=blog_owner)
+
     else:
-        blogs = query_all_blogs_lifo()
+        # sort = request.args.get('sort')
+        # blogs = sorting(sort)
+
+        sort = request.args.get('sort')
+        blogs = sorting(sort)
+
+        # blogs = query_all_blogs_lifo()
         return render_template('blog.html', title="Blog", blogs=blogs)
 
 @app.route("/blogs")
 def blogs(blogs='', owner='', blog_title='', blog_body=''):
     """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
-    blogs = query_all_blogs_lifo()
+    # blogs = query_all_blogs_lifo()
+    sort = request.args.get('sort')
+    blogs = sorting(sort)
+
    # Avoid validation first time template is rendered and on post rerenders when error
     return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
 
@@ -404,11 +418,14 @@ def query_all_blogs_fifo():
 
 def query_all_blogs_lifo():
     """LIFO query all blogs, aka reverse order."""
-    return Blog.query.order_by(Blog.title.desc()).all()
+    return Blog.query.order_by(Blog.created.desc()).all()
 
 def query_all_users_lifo():
     """LIFO query all blogs, aka reverse order."""
     return User.query.order_by(User.username.desc()).all()
+
+def query_all_blogs_by_title():
+    return Blog.query.order_by(Blog.title.desc()).all()
 
 @app.route("/")
 def home():
@@ -445,14 +462,45 @@ def user_dot_blogs():
     blogs = Blog.query.all()
     return render_template('user_dot_blogs.html', title="User.blogs", users=users, blogs=blogs)
 
+def sorting(sort, blogs=''):
+    sort = sort
+    if sort:
+        if (sort=="newest"):
+            blogs = Blog.query.order_by(Blog.created.desc()).all()
+        if (sort=="oldest"):
+            blogs = Blog.query.order_by(Blog.created).all()
+        if (sort=="title"):
+            blogs = Blog.query.order_by(Blog.title).all()
+        if (sort=="title2"):
+            blogs = Blog.query.order_by(Blog.title.desc()).all()
+        if (sort=="user"):
+            blogs = Blog.query.order_by(Blog.owner_id).all()
+        if (sort=="user2"):
+            blogs = Blog.query.order_by(Blog.owner_id.desc()).all()
+    else:
+        blogs = Blog.query.order_by(Blog.created.desc()).all()
+    return blogs
+
 @app.route("/timeline", methods=['POST', 'GET'])
 def timeline():
+    """Provide alternate viewing with params http://localhost:5000/timeline?sort=title"""
     sort = request.args.get('sort')
-    if (sort=="newest"):
-        blogs = Blog.query.order_by(Blog.created.desc()).all()
-    else:
-        blogs = Blog.query.all()
-    return render_template('timeline.html', title="timeline", blogs=blogs)
+    blogs = sorting(sort)
+
+    # TODO: consider creating drop down menu or form instead of query params
+    # if request.method == 'POST':
+    #     # sort = request.form['sort']
+    #     sort = request.args.get('sort')
+    #     print(str(sort))
+
+    # if request.args:
+    #     sort = sort()
+
+        # blogs = sort()
+    # else:
+        # blogs = Blog.query.order_by(Blog.created.desc()).all()
+    # return render_template('timeline.html', title="timeline", blogs=blogs, sort=sort)
+    return render_template('timeline.html', title="timeline", blogs=blogs, sort=sort)
 
 @app.route("/color", methods=['POST', 'GET'])
 def color():

@@ -6,6 +6,7 @@
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
     {% endif %}
     <div class="panel panel-primary see_through01 mb0">
+        <div class="right">{% include 'sort_links.html' %}</div>
         <div class="panel-heading">
             <h1 class='mt0 mb0'>{{title}}</h1>
         </div>
