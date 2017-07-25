@@ -1,0 +1,47 @@
+{% include 'base.html' %}
+<div class="col-lg-4"></div>
+<div class="col-lg-4">
+    {% include 'session_login_label.html' %}
+    <div class="panel panel-primary see_through01 mb3">
+        <div class="panel-heading">
+            <h1 class='mt0 mb0'>{{title}}</h1>
+        </div>
+        <div class='panel panel-default mb0'>
+            <div class='panel-body see_through2'>
+                {% block content %}
+                {% endblock %}
+                {% for blog in blogs.items %}
+                    <p>
+                      <div>{{ blog.title }}</div>
+                      <div>{{ blog.body }}</div>
+                      <div>{{ blog.created }}</div>
+                    </p>
+                {% endfor %}
+                <ul class="pagination pagination-sm">
+                  {% if blogs.has_prev %}
+                      <li><a href="{{ url_for('pages', page=blogs.prev_num) }}">
+                        <!-- &lt;&lt; -->
+                        <span class="glyphicon glyphicon-menu-left"></span>
+                      </a></li>
+                  {% else %}
+                     <li><a class='disabled dark' href='#'>
+                       <!-- &lt;&lt;  -->
+                       <span class="glyphicon glyphicon-menu-left"></span>
+                      </a></li>
+                  {% endif %}
+                  {% if blogs.has_next %}
+                      <li><a href="{{ url_for('pages', page=blogs.next_num) }}">
+                        <!-- &gt;&gt; -->
+                        <span class="glyphicon glyphicon-menu-right"></span>
+                      </a></li>
+                  {% else %}
+                      <li><a class='disabled dark' href='#'>
+                        <!-- &gt;&gt; -->
+                        <span class="glyphicon glyphicon-menu-right"></span>
+                      </a></li>
+                  {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+<div class="col-lg-4"></div>

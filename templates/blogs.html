@@ -18,7 +18,30 @@
             </div>
         </div>
         <div class="panel panel-primary see_through01 b0">
-            {% if blogs %}
+            <!-- /blogs/1 -->
+            {% if blogs.items %}
+                {% for blog in blogs.items %}
+                    <div class='panel panel-default mb3'>
+                        <div class='panel-body'>
+                            <div class="">
+                                <a href="{{ url_for('blog', id=blog.id, blog_title=blog.title, blog_body=blog.body) }}">
+                                    <h4 class='no_top_margin'>
+                                        <p class='wrap'>{{blog.title}}</p>
+                                    </h4>
+                                </a>
+                                <p class='wrap'>{{blog.body}}</p>
+                                {% include 'date.html' %}
+                                {% if blog.owner.username %}
+                                    {% include 'blog_owner_link.html' %}
+                                {% endif %}
+                                {% include 'delete_blog_form.html' %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% include 'blogs_pagination.html' %}
+            <!-- /blogs -->
+            {% elif blogs %}
                 {% for blog in blogs %}
                     <div class='panel panel-default mb3'>
                         <div class='panel-body'>
@@ -31,7 +54,7 @@
                                 <p class='wrap'>{{blog.body}}</p>
                                 {% include 'date.html' %}
                                 {% if blog.owner.username %}
-                                    <span class="label label-default right">{{blog.owner.username}}</span>
+                                    {% include 'blog_owner_link.html' %}
                                 {% endif %}
                                 {% include 'delete_blog_form.html' %}
                             </div>

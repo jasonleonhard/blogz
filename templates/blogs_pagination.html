@@ -1,0 +1,24 @@
+<ul class="pagination pagination-sm m0">
+    {% if blogs.has_prev %}
+        <li><a href="{{blogs.prev_num}}" class="btn btn-info btn-sm">
+            <!-- &lt;&lt; -->
+            <span class="glyphicon glyphicon-menu-left"></span>
+        </a></li>
+    {% else %}
+        <li><a class='disabled dark btn btn-info btn-sm' href='#'>
+            <!-- &lt;&lt;  -->
+            <span class="glyphicon glyphicon-menu-left"></span>
+        </a></li>
+    {% endif %}
+    {% if blogs.has_next %}
+        <li><a href="{{blogs.next_num}}" class="btn btn-info btn-sm">
+            <!-- &gt;&gt; -->
+            <span class="glyphicon glyphicon-menu-right"></span>
+        </a></li>
+    {% else %}
+        <li><a class='btn btn-info btn-sm' href='#'>
+            <!-- &gt;&gt; -->
+            <span class="glyphicon glyphicon-menu-right"></span>
+        </a></li>
+    {% endif %}
+</ul>

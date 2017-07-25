@@ -333,13 +333,33 @@ def blog(blog_title='', blog_body='', blog_id=''):
 
 @app.route("/blogs")
 def blogs(blogs='', owner='', blog_title='', blog_body=''):
-    """I would prefer to handle posts, gets and validations all on one page '/blogs'"""
+    """Show all '/blogs' and allow for sorting, this version does not paginate by default"""
+    # TODO: allow for sorting when using pagination
     # blogs = query_all_blogs_lifo()
     sort = request.args.get('sort')
     blogs = sort_blogs(sort)
 
    # Avoid validation first time template is rendered and on post rerenders when error
     return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
+
+@app.route("/blogs/<int:page>")
+def blogs_paging(blogs='', owner='', blog_title='', blog_body='', page=1):
+    """This version paginates at blogs/1 but does not sort well"""
+    # TODO: allow for sorting when using pagination
+    per_page = 4
+    # blogs = Blog.query.order_by(Blog.created.desc()).paginate(page, per_page, error_out=False)
+    sort = request.args.get('sort')
+    blogs = sort_blogs(sort)
+    blogs = Blog.query.order_by(Blog.created.desc()).paginate(page, per_page, error_out=False)
+    # Avoid validation first time template is rendered
+    return render_template('blogs.html', title="Blogs", blogs=blogs, blog_title=blog_title, blog_body=blog_body)
+
+@app.route('/pages/<int:page>',methods=['GET'])
+def pages(page=1):
+    title = 'Pagination'
+    per_page = 4
+    blogs = Blog.query.order_by(Blog.created.desc()).paginate(page, per_page, error_out=False)
+    return render_template('pages.html', blogs=blogs, title=title)
 
 @app.route('/delete-user', methods=['GET', 'POST'])
 def delete_user():
@@ -392,7 +412,7 @@ def delete_blog():
 def delete_blog2():
     """Remove a blog from /blogs. Added for different redirect for /blogs"""
     deleting_blog()
-    return redirect('/blogs')
+    return redirect('/blogs/1')
 
 @app.route("/delete_blog3", methods=['GET', 'POST'])
 def delete_blog3():
@@ -544,6 +564,7 @@ def add_header(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
+
 
 if __name__ == '__main__':
     app.run()
