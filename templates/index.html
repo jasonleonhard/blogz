@@ -3,12 +3,8 @@
 <div class="panel-body">
     {% if users %}
         {% for user in users %}
-        <div>
-            <a href="singleuser?username={{user.username}}&user_id={{user.id}}">
-                <span style='display:block;' class="label label-default">{{user.blogs.count()}} Blogs by: {{user.username}}</span>
-            </a>
-        </div>
-        <div class="pad"></div>
+            {% include 'user_link2.html' %}
+            <div class="pad"></div>
         {% endfor %}
     {% else %}
         <b class="error">No users signed up yet</b>
