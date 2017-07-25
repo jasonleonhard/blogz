@@ -281,6 +281,8 @@ def newpost(blog_title='', blog_body='', blog_error=''):
                 return render_template('singlePost.html', title=title, blog=blog)
     else:
         return redirect('/login')
+
+@app.route("/myblogs")
 def myblogs(blog_title='', blog_body=''):
     """Only list my blogs."""
     owner = User.query.filter_by(username=session['username']).first()
