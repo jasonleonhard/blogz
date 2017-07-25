@@ -32,7 +32,7 @@ db.session.add(blog4)
 blog5 = Blog('meow for can opener to feed me', 'Chase after silly colored fish toys around the house plop down in the middle where everybody walks yet scratch leg', user3)
 db.session.add(blog5)
 
-blog6 = Blog('Jump on human and sleep on her all night long be long in the bed', 'purr in the morning and then give a bite to every human around for not waking up request food, purr loud scratch the walls', user3)
+blog6 = Blog('Jump on human and sleep on her all night long', 'purr in the morning and then give a bite to every human around for not waking up request food', user3)
 db.session.add(blog6)
 
 admin = User('Admin', 'admins')
