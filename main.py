@@ -448,19 +448,19 @@ def home():
         users_names.append(user.username)
     return render_template('index.html', title='Greetings', directions='Click name to view users blogs', users=users)
 
-# @app.route("/singleuser", methods=['POST', 'GET'])
-# def singleuser():
-#     blogs = query_all_blogs_lifo()
-#     users = query_all_users_lifo()
-#     user_id = request.args.get('user_id')
-#     username = request.args.get('username')
-#     owner = User.query.filter_by(username=username).first()
-#     owner_id = owner.id
-#     title = owner.username + "'s Blogs"
-#     blogs = Blog.query.filter_by(owner=owner).all()
-#     n_blogs = len(blogs)
-#     return render_template('singleUser.html', title=title, blogs=blogs, users=users, user_id=user_id,
-#                            username=username, owner=owner, owner_id=owner_id, n_blogs=n_blogs)
+@app.route("/singleuser", methods=['POST', 'GET'])
+def singleuser():
+    blogs = query_all_blogs_lifo()
+    users = query_all_users_lifo()
+    user_id = request.args.get('user_id')
+    username = request.args.get('username')
+    owner = User.query.filter_by(username=username).first()
+    owner_id = owner.id
+    title = owner.username + "'s Blogs"
+    blogs = Blog.query.filter_by(owner=owner).all()
+    n_blogs = len(blogs)
+    return render_template('singleUser.html', title=title, blogs=blogs, users=users, user_id=user_id,
+                           username=username, owner=owner, owner_id=owner_id, n_blogs=n_blogs)
 
 @app.route("/duck", methods=['POST', 'GET'])
 def duck():
