@@ -35,4 +35,7 @@ db.session.add(blog5)
 blog6 = Blog('Jump on human and sleep on her all night long be long in the bed', 'purr in the morning and then give a bite to every human around for not waking up request food, purr loud scratch the walls', user3)
 db.session.add(blog6)
 
+admin = User('Admin', 'admins')
+db.session.add(admin)
+
 db.session.commit()
