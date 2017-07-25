@@ -316,7 +316,7 @@ def blog(blog_title='', blog_body='', blog_id=''):
         blog_title = get_title()
         blog_body = get_body()
         blog_id = get_id()
-        blog = Blog.query.get(blog_id).order_by(Blog.created.desc()).all()
+        blog = Blog.query.get(blog_id)
         blog_owner = blog.owner.username
         return render_template('id.html', title="Blog", blog=blog, blog_title=blog_title,
                                 blog_body=blog_body, blog_id=blog_id, blog_owner=blog_owner)
