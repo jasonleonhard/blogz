@@ -93,6 +93,7 @@ blog4 = Blog('Bucket of bolts', 'How I managed to replace half the worlds jobs i
 blog5 = Blog('meow for can opener to feed me', 'Chase after silly colored fish toys around the house plop down in the middle where everybody walks yet scratch leg', user3)
 blog6 = Blog('Jump on human and sleep on her all night long', 'purr in the morning and then give a bite to every human around for not waking up request food', user3)
 
+# use env variables to store admin password
 admin_pw = os.environ['ADMIN_PW']
 admin = User('admin', admin_pw)
 
