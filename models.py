@@ -8,7 +8,7 @@ class User(db.Model):
     """User class definition and init."""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30))#, unique=True)
-    password = db.Column(db.String(30)) # regular pw
+    password = db.Column(db.String(100)) # regular pw
     hidden = db.Column(db.Boolean)
     # pw_hash = db.Column(db.String(30))    # hashed pw
     created = db.Column(db.DateTime)
