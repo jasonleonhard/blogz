@@ -4,6 +4,14 @@
 <div class="col-lg-4">
     {% if session %}
         <span class="label label-default">Logged in as: {{ session['username'].upper() }}</span>
+        {% if session['username'].upper() == 'ADMIN' %}
+            <a href="/hideall"  class="right">
+                <span class="label label-default">Hideall</span>
+            </a>
+            <a href="/unhideall"  class="right">
+                <span class="label label-default">Unhideall</span>
+            </a>
+        {% endif %}
     {% endif %}
     <div class="panel panel-primary see_through01 mb0">
         <div class="panel-heading">
@@ -12,45 +20,42 @@
         </div>
     </div>
     <div class='panel panel-default mb1'>
-        <div class='panel-body'>
-        <!-- <strong class='error' value="{ {password_error}}">{ {password_error}}</strong> -->
-        <!-- <strong class='error' value="{ {username_error}}">{ {username_error}}</strong> -->
-        <div class="col-xs-8">
-            {% if users %}
-                <div class="col-xs-6">
-                    <div><b>name</b></div>
+        <div class='panel-body p0'>
+            <div class="col-xs-12 p0">
+                {% if users %}
                     {% for user in users %}
-                    <div>
-                        <!--linkable user tag-->
-                        <a href="/singleuser?username={{user.username}}&user_id={{user.id}}">
-                            <span class="label label-default">{{user.username}}</span>
-                        </a>
-                    </div>
+                        {% if session['username'].upper() == 'ADMIN' %}
+                            <div class='col-xs-12 p0'>
+                                <!--linkable user tag-->
+                                <a href="/singleuser?username={{user.username}}&user_id={{user.id}}"  class="btn btn-default btn-xs">
+                                    <div>{{user.username}}</div>
+                                </a>
+                                <!--linkable user tag-->
+                                <a href="/singleuser?username={{user.username}}&user_id={{user.id}}"  class="btn btn-primary btn-xs right">
+                                    <div>View</div>
+                                </a>
+                                <form action="/hide-user" method="POST" class='right'>
+                                    <input type="hidden" name="user-id" value="{{user.id}}">
+                                    <input type="submit" value="Hide" class='btn btn-warning btn-xs'>
+                                </form>
+                                <form action="/delete-user" method="POST" class='right'>
+                                    <input type="hidden" name="user-id" value="{{user.id}}">
+                                    <input type="submit" value="Delete" class='btn btn-danger btn-xs'>
+                                </form>
+                            </div>
+                        {% else %}
+                            <div class='col-xs-12'>
+                                <!--linkable user tag-->
+                                <a href="/singleuser?username={{user.username}}&user_id={{user.id}}"  class="btn btn-primary btn-xs">
+                                    <div>View {{user.username}}</div>
+                                </a>
+                            </div>
+                        {% endif %}
                     {% endfor %}
-                </div>
-                <div class="col-xs-2">
-                     <div><b>id</b></div>
-                    {% for user in users %}
-                        <div>{{user.id}}</div>
-                    {% endfor %}
-                </div>
-                <!-- <div class="col-xs-2">
-                     <div><b>pw</b></div>
-                    { % for user in users %}
-                        <div>{ {user.password}}</div>
-                    { % endfor %}
-                </div> -->
-                <!-- <div class="col-xs-2">
-                     <div><b>hashed</b></div>
-                    { % for user in users %}
-                        <div>{ {user.pw_hash}}</div>
-                    { % endfor %}
-                </div> -->
-            {% else %}
-                <b class="error">No users signed up yet</b>
-            {% endif %}
-        </div>
-    </div>
+                {% else %}
+                    <b class="error">No users signed up yet</b>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
