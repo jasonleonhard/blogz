@@ -1,15 +1,17 @@
 {% if users %}
 <!--{ % if users|length == 0 %}-->
     {% for user in users %}
+        {% if user.hidden == False %}
         <div class='panel panel-default mb3'>
             <div class='panel-body'>
                 <!-- Can enable feature to only allow delete if its your post
                 { % if user.username == session['username'] %} -->
-                    {% include 'delete_user_form.html' %}
+                {% include 'delete_user_form.html' %}
                 <!--{ % endif %}-->
                 {% include 'user_link.html' %}
             </div>
         </div>
+        {% endif %}
     {% endfor %}
 {% else %}
     <b class="error">

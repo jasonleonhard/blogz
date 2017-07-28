@@ -45,7 +45,10 @@ def userlist():
            redirect to signup page
     """
     users = query_all_users_by_name()
+    # users = User.query.filter_by(hidden=True).first()
+    # users = User.query.filter_by(hiden=False).all()
     if len(users) == 0:
+        logout()
         return redirect('/signup')
     else:
         return render_template('userlist.html', title='User List', users=users)
@@ -359,6 +362,29 @@ def pages(page=1):
 
 @app.route('/delete-user', methods=['GET', 'POST'])
 def delete_user():
+    """Delete grabs hidden user id from form, queries by it and deletes with db commit."""
+    user_id = int(request.form['user-id'])
+    user = User.query.get(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    if session:
+        if user.username == session['username']:
+            del session['id']
+            del session['username']
+            del session['password']
+    return redirect('/signup')
+
+@app.route('/hide-user', methods=['GET', 'POST'])
+def hide_user():
+    """This version hides user instead of removing from db.
+    grabs hidden user id from form, queries by it and 'deletes' by hiding."""
+    hiding_user()
+    users = User.query.filter_by(hidden=False).all()
+    return render_template('userlist.html', users=users)
+    # return render_template('signup.html', users=users)
+    # return redirect('/userlist')
+
+def hiding_user():
     """This version hides user instead of removing from db.
     grabs hidden user id from form, queries by it and 'deletes' by hiding."""
     user_id = int(request.form['user-id'])
@@ -368,20 +394,9 @@ def delete_user():
     hide_user.hidden = True
     db.session.add(hide_user)
     db.session.commit()
-    return render_template('signup.html', hide_user=hide_user)
+    # users = query_all_users_lifo()
+    users = User.query.filter_by(hidden=False).all()
 
-@app.route('/delete-user2', methods=['GET', 'POST'])
-def delete_user2():
-    """Delete user works. grabs hidden user id from form, queries by it and deletes with db commit."""
-    user_id = int(request.form['user-id'])
-    user = User.query.get(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    if session:
-        del session['id']
-        del session['username']
-        del session['password']
-    return redirect('/signup')
 
 def deleting_blog():
     """Delete a blog by blog-id we use request parameters and session."""
@@ -542,6 +557,32 @@ def color():
     """."""
     title = 'Color'
     return render_template('color.html', title=title)
+
+@app.route("/hideall", methods=['POST', 'GET'])
+def hide_all_users():
+    if session['username'].upper() == 'ADMIN':
+        # find all users that are not hidden, and set them to hidden
+        users = User.query.filter_by(hidden=False).all()
+        for user in users:
+            # if user is not Admin
+            if user.username != session['username']:
+                user.hidden = True;
+        db.session.commit()
+        return redirect('/userlist')
+    else:
+        flash('Only admin may hide users')
+
+@app.route("/unhideall", methods=['POST', 'GET'])
+def unhide_all_users():
+    if session['username'].upper() == 'ADMIN':
+        # find all users that are hidden, and set them to not hidden
+        users = User.query.filter_by(hidden=True).all()
+        for user in users:
+            user.hidden = False;
+        db.session.commit()
+        return redirect('/userlist')
+    else:
+        flash('Only admin may unhide users')
 
 # disable browser caching
 @app.after_request
